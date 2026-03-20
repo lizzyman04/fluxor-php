@@ -22,6 +22,7 @@ class Installer
             'has_auth' => false,
             'has_views' => true,
             'has_controllers' => false,
+            'api_endpoints' => 1,
         ],
         'mvc' => [
             'name' => 'MVC Full Stack',
@@ -29,6 +30,7 @@ class Installer
             'has_auth' => true,
             'has_views' => true,
             'has_controllers' => true,
+            'api_endpoints' => 0,
         ],
         'api' => [
             'name' => 'RESTful API',
@@ -36,6 +38,7 @@ class Installer
             'has_auth' => false,
             'has_views' => false,
             'has_controllers' => false,
+            'api_endpoints' => 6,
         ],
     ];
 
@@ -92,11 +95,15 @@ class Installer
         $choices = [];
         $index = 1;
         foreach (self::TEMPLATES as $key => $template) {
+            $endpoints = $template['api_endpoints'] > 0
+                ? " ({$template['api_endpoints']} API endpoints)"
+                : '';
             $io->write(sprintf(
-                "  [%d] <comment>%s</comment> - %s",
+                "  [%d] <comment>%s</comment> - %s%s",
                 $index,
                 $template['name'],
-                $template['description']
+                $template['description'],
+                $endpoints
             ));
             $choices[$index] = $key;
             $index++;
@@ -155,45 +162,70 @@ class Installer
                 if (!is_numeric($value) || $value < 1024 || $value > 65535) {
                     throw new \RuntimeException('Please enter a valid port (1024-65535)');
                 }
-                return $value;
+                return (int) $value;
             },
             null,
             '8000'
         );
 
-        $config['timezone'] = $io->ask(
+        $config['timezone'] = $io->askAndValidate(
             "Timezone [<comment>UTC</comment>]: ",
+            function ($value) {
+                $value = $value ?: 'UTC';
+                if (!in_array($value, timezone_identifiers_list())) {
+                    throw new \RuntimeException('Please enter a valid PHP timezone (e.g., Africa/Maputo)');
+                }
+                return $value;
+            },
+            null,
             'UTC'
         );
 
         $config['app_key'] = 'base64:' . base64_encode(random_bytes(32));
 
         if (self::TEMPLATES[$template]['has_auth'] || self::TEMPLATES[$template]['has_controllers']) {
-            $io->write("\n<info>🗄️  Database Configuration</info>");
-
-            $config['db_connection'] = $io->askAndValidate(
-                "Database connection [<comment>mysql</comment>]: ",
-                function ($value) {
-                    $value = $value ?: 'mysql';
-                    if (!in_array($value, ['mysql', 'pgsql', 'sqlite', 'none'])) {
-                        throw new \RuntimeException('Please choose mysql, pgsql, sqlite, or none');
-                    }
-                    return $value;
-                },
-                null,
-                'mysql'
-            );
-
-            if ($config['db_connection'] !== 'none' && $config['db_connection'] !== 'sqlite') {
-                $config['db_host'] = $io->ask("Database host [<comment>127.0.0.1</comment>]: ", '127.0.0.1');
-                $config['db_port'] = $io->ask("Database port [<comment>3306</comment>]: ", '3306');
-                $config['db_database'] = $io->ask("Database name: ");
-                $config['db_username'] = $io->ask("Database username: ");
-                $config['db_password'] = $io->ask("Database password: ");
-            } elseif ($config['db_connection'] === 'sqlite') {
-                $config['db_database'] = $io->ask("Database path [<comment>database/fluxor.sqlite</comment>]: ", 'database/fluxor.sqlite');
-            }
+            $config = array_merge($config, self::configureDatabase($io));
         }
+
+        return $config;
+    }
+
+    private static function configureDatabase(IOInterface $io): array
+    {
+        $config = [];
+
+        $io->write("\n<info>🗄️  Database Configuration</info>");
+
+        $config['db_connection'] = $io->askAndValidate(
+            "Database connection [<comment>mysql</comment>]: ",
+            function ($value) {
+                $value = $value ?: 'mysql';
+                if (!in_array($value, ['mysql', 'pgsql', 'sqlite', 'none'])) {
+                    throw new \RuntimeException('Please choose mysql, pgsql, sqlite, or none');
+                }
+                return $value;
+            },
+            null,
+            'mysql'
+        );
+
+        if ($config['db_connection'] === 'none') {
+            return $config;
+        }
+
+        if ($config['db_connection'] === 'sqlite') {
+            $config['db_database'] = $io->ask(
+                "Database path [<comment>database/fluxor.sqlite</comment>]: ",
+                'database/fluxor.sqlite'
+            );
+            return $config;
+        }
+
+        $config['db_host'] = $io->ask("Database host [<comment>127.0.0.1</comment>]: ", '127.0.0.1');
+        $config['db_port'] = $io->ask("Database port [<comment>3306</comment>]: ", '3306');
+        $config['db_database'] = $io->ask("Database name: ");
+        $config['db_username'] = $io->ask("Database username: ");
+        $config['db_password'] = $io->ask("Database password: ");
 
         return $config;
     }
@@ -222,9 +254,11 @@ class Installer
                 continue;
             }
 
-            $fs->mkdir(dirname($targetPath));
-            $fs->copy($file->getPathname(), $targetPath);
+            if (!file_exists(dirname($targetPath))) {
+                $fs->mkdir(dirname($targetPath));
+            }
 
+            $fs->copy($file->getPathname(), $targetPath);
             $io->write(sprintf("  <info>Create:</info> %s", $relativePath));
             $count++;
         }
@@ -282,6 +316,16 @@ class Installer
         $composer['scripts']['dev'] = "php -S localhost:{$config['app_port']} -t public";
         $composer['scripts']['test'] = "phpunit";
 
+        if (isset($composer['autoload']['classmap'])) {
+            $composer['autoload']['classmap'] = array_values(array_filter(
+                $composer['autoload']['classmap'],
+                fn($item) => $item !== 'Installer.php'
+            ));
+            if (empty($composer['autoload']['classmap'])) {
+                unset($composer['autoload']['classmap']);
+            }
+        }
+
         file_put_contents($composerFile, json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
 
         $io->write("<info>✅ composer.json updated</info>");
@@ -293,18 +337,15 @@ class Installer
         $removed = [];
 
         $toRemove = [
-            'Installer.php',
+            'docs',
             'templates',
-            'mkdocs.yml',
-            'README.docs.md',
             'package.json',
             'package-lock.json',
-            '.github/workflows/deploy.yml',
+            'Installer.php',
             '.github/workflows/deploy-docs.yml',
         ];
 
         $dirsToRemove = [
-            'docs',
             '.github',
         ];
 
@@ -322,6 +363,11 @@ class Installer
                 $fs->remove($path);
                 $removed[] = $dir . '/';
             }
+        }
+
+        $gitkeepPath = $projectDir . '/storage/framework/.gitkeep';
+        if ($fs->exists($gitkeepPath)) {
+            $fs->remove($gitkeepPath);
         }
 
         if (!empty($removed)) {

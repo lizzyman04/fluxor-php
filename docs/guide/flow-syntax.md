@@ -19,9 +19,6 @@ Flow::POST()->do(function($req) {
     $data = $req->all();
     return Response::success($data);
 });
-
-// Return the executed flow
-return Flow::execute($req);
 ```
 
 ## HTTP Methods

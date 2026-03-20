@@ -1,11 +1,11 @@
 <?php
-
 use Fluxor\Flow;
 use Fluxor\Response;
 
 Flow::GET()->do(function ($req) {
+    $name = $req->input('name', 'World');
     return Response::json([
-        'version' => '1.0.0',
-        'status' => 'active'
+        'message' => "Hello, {$name}!",
+        'time' => time()
     ]);
 });

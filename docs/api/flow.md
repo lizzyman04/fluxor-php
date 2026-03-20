@@ -41,12 +41,6 @@ Flow::GET()->name('home')->do(fn($req) => ...);
 Flow::route('home');  // Generate URL
 ```
 
-### Execution
-
-```php
-return Flow::execute($request);
-```
-
 ## Examples
 
 ### Simple Routes

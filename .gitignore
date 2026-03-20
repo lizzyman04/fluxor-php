@@ -47,9 +47,6 @@ tests/coverage-html/
 node_modules/
 docs/.vitepress/dist/
 docs/.vitepress/cache/
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
 
 # Build outputs
 public/build/

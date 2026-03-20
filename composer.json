@@ -5,7 +5,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Arlindo",
+            "name": "Arlindo Augusto",
             "email": "admin@tudocomlizzyman.com",
             "homepage": "https://lizzyman04.omeu.space"
         }
@@ -20,7 +20,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/"
-        }
+        },
+        "classmap": [
+            "Installer.php"
+        ]
     },
     "scripts": {
         "post-create-project-cmd": [
@@ -30,5 +33,6 @@
         "test": "phpunit"
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "version": "1.0.0"
 }

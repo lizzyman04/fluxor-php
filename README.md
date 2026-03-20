@@ -57,8 +57,6 @@ use Fluxor\Response;
 Flow::GET()->do(fn($req) => 
     Response::success(['message' => 'Hello, ' . $req->input('name', 'World')])
 );
-
-return Flow::execute($req);
 ```
 
 ## 📚 Documentation
