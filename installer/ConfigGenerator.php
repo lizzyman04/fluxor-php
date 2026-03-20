@@ -95,7 +95,7 @@ class ConfigGenerator
             function ($value) {
                 $value = $value ?: 'UTC';
                 if (!in_array($value, timezone_identifiers_list())) {
-                    throw new \RuntimeException('Please enter a valid PHP timezone (e.g., Africa/Maputo, America/Sao_Paulo)');
+                    throw new \RuntimeException('Please enter a valid PHP timezone (e.g., Africa/Maputo)');
                 }
                 return $value;
             },

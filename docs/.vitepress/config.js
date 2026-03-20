@@ -6,8 +6,8 @@ export default {
         logo: '/fluxor.svg',
         nav: [
             { text: 'Guide', link: '/guide/' },
-            { text: 'API', link: '/api/' },
-            { text: 'GitHub', link: 'https://github.com/lizzyman04/fluxor-php' }
+            { text: 'API Reference', link: '/api/' },
+            { text: 'GitHub', link: 'https://github.com/lizzyman04/fluxor' }
         ],
         sidebar: {
             '/guide/': [
@@ -45,7 +45,7 @@ export default {
             ]
         },
         socialLinks: [
-            { icon: 'github', link: 'https://github.com/lizzyman04/fluxor' }
+            { icon: 'github', link: 'https://github.com/lizzyman04/fluxor-php' }
         ],
         footer: {
             message: 'Released under the MIT License.',
