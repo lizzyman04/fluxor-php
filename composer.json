@@ -5,7 +5,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Arlindo Augusto",
+            "name": "Arlindo",
             "email": "admin@tudocomlizzyman.com",
             "homepage": "https://lizzyman04.omeu.space"
         }
@@ -22,7 +22,7 @@
             "App\\": "src/"
         },
         "classmap": [
-            "Installer.php"
+            "installer/"
         ]
     },
     "scripts": {

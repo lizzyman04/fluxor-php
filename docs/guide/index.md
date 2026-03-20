@@ -7,7 +7,7 @@ Fluxor is a lightweight PHP MVC framework inspired by Next.js file-based routing
 - **Simplicity**: No magic, transparent code you can read
 - **Speed**: Boot under 10ms, zero overhead
 - **Elegance**: Beautiful Flow syntax for route definitions
-- **Security**: Built-in CSRF, XSS protection
+- **Security**: Built-in CSRF, XSS protection, secure sessions
 
 ## Why Fluxor?
 
@@ -16,6 +16,7 @@ Fluxor is a lightweight PHP MVC framework inspired by Next.js file-based routing
 - ✅ Zero configuration (auto-detects paths)
 - ✅ Built-in view system with layouts
 - ✅ Middleware support
+- ✅ Comprehensive error handling
 - ✅ Under 10ms boot time
 
 ## Quick Example
@@ -39,3 +40,6 @@ Flow::GET()->do(function($req) {
 - [Routing](/guide/routing)
 - [Flow Syntax](/guide/flow-syntax)
 - [Views & Layouts](/guide/views)
+- [Controllers](/guide/controllers)
+- [Middleware](/guide/middleware)
+- [Error Handling](/guide/error-handling)

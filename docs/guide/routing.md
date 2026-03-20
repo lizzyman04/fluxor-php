@@ -8,7 +8,7 @@ Create PHP files in `app/router/`:
 
 | File | URL |
 |------|-----|
-| `app/router/page.php` | `/` |
+| `app/router/index.php` | `/` |
 | `app/router/about.php` | `/about` |
 | `app/router/contact/index.php` | `/contact` |
 
@@ -39,15 +39,17 @@ Flow::GET()->do(function($req) {
 app/router/posts/[category]/[id].php
 ```
 
-## Optional Groups
+## Optional Groups (Prefixes)
 
-Use `(group)` for optional URL prefixes:
+Use `(group)` for logical grouping without affecting URLs:
 
 ```
-app/router/(admin)/dashboard.php
+app/router/(admin)/dashboard.php   # URL: /dashboard
+app/router/(admin)/users.php        # URL: /users
+app/router/(api)/v1/users.php       # URL: /v1/users
 ```
 
-This matches `/dashboard`.
+The group name is ignored in the URL path.
 
 ## API Routes
 

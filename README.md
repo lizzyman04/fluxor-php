@@ -6,12 +6,30 @@
 [![Total Downloads](https://poser.pugx.org/lizzyman04/fluxor-php/downloads)](https://packagist.org/packages/lizzyman04/fluxor-php)
 [![License](https://poser.pugx.org/lizzyman04/fluxor-php/license)](https://packagist.org/packages/lizzyman04/fluxor-php)
 
-## Quick Start
+## 📖 Documentation
+
+**Full documentation available at:** 👉 [**https://lizzyman04.github.io/fluxor-php**](https://lizzyman04.github.io/fluxor-php)
+
+The documentation includes:
+- Installation guide
+- File-based routing
+- Flow syntax reference
+- Views and layouts
+- Controllers and middleware
+- API reference
+- Template options (Default, MVC, API)
+
+## 🚀 Quick Start
 
 ```bash
-composer create-project lizzyman04/fluxor-php meu-app
-cd meu-app
-php -S localhost:8000 -t public
+# Create a new Fluxor project
+composer create-project lizzyman04/fluxor-php my-app
+
+# Navigate to the project
+cd my-app
+
+# Start the development server
+composer dev
 ```
 
 Visit `http://localhost:8000`
@@ -19,7 +37,7 @@ Visit `http://localhost:8000`
 ## 📁 Project Structure
 
 ```
-meu-app/
+my-app/
 ├── app/
 │   └── router/          # File-based routes (like Next.js)
 │       ├── page.php     # GET /
@@ -29,23 +47,24 @@ meu-app/
 ├── public/
 │   └── index.php        # Front controller
 ├── src/
-│   ├── Controllers/     # Your controllers
-│   └── Views/           # View templates
+│   ├── Controllers/     # Your controllers (MVC template)
+│   └── Views/           # View templates (MVC template)
 ├── storage/             # Logs, cache, sessions
-├── .env                 # Environment config
-└── composer.json
+├── .env                 # Environment configuration
+└── composer.json        # Project dependencies
 ```
 
-## 🎯 File-Based Routing
+## 🎯 Available Templates
 
-Create routes by adding files:
+During installation, you can choose from three templates:
 
-- `app/router/page.php` → `/`
-- `app/router/about.php` → `/about`
-- `app/router/posts/[slug]/index.php` → `/posts/{slug}`
-- `app/router/api/users/[id].php` → `/api/users/{id}`
+| Template | Description |
+|----------|-------------|
+| **Default** | Minimal starter with basic routing and clean structure |
+| **MVC** | Complete MVC with authentication, views, and controllers |
+| **API** | Lightweight RESTful API with CORS and JSON responses |
 
-## 💎 Flow Syntax
+## 💎 Example: Hello World
 
 ```php
 <?php
@@ -59,10 +78,15 @@ Flow::GET()->do(fn($req) =>
 );
 ```
 
-## 📚 Documentation
+## 📦 Requirements
 
-Full documentation available at [https://github.com/lizzyman04/fluxor](https://github.com/lizzyman04/fluxor)
+- PHP 8.2 or higher
+- Composer
 
 ## 📄 License
 
-MIT
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+**Fluxor** - Build elegant PHP applications with joy! 🎉

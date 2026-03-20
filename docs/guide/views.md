@@ -1,5 +1,13 @@
 # Views & Layouts
 
+## Views Path
+
+Views are stored in `src/Views/` by default. You can change this in configuration:
+
+```php
+$app->setConfig(['views_path' => __DIR__ . '/resources/views']);
+```
+
 ## Basic View
 
 Create a view in `src/Views/home.php`:

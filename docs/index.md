@@ -1,5 +1,4 @@
-# https://vitepress.dev/reference/default-theme-home-page
-
+---
 layout: home
 
 hero:
@@ -7,7 +6,7 @@ hero:
   text: "Lightweight MVC framework"
   tagline: File-based routing, elegant Flow syntax, zero bloat
   image:
-    src: /logo.svg
+    src: /fluxor.svg
     alt: Fluxor
   actions:
     - theme: brand
@@ -26,3 +25,5 @@ features:
     details: Boot under 10ms, zero magic, transparent code
   - title: 🛡️ Security First
     details: Built-in CSRF, XSS protection, secure sessions
+
+---

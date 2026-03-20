@@ -62,6 +62,15 @@ return Response::error('Validation failed', 422, ['email' => 'Invalid email']);
 return Response::view('home', ['title' => 'Welcome']);
 ```
 
+### View with Data
+
+```php
+return Response::view('profile', [
+    'user' => $user,
+    'posts' => $posts
+]);
+```
+
 ### Redirect
 
 ```php

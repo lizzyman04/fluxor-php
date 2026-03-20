@@ -1,8 +1,9 @@
 export default {
     title: 'Fluxor PHP',
+    base: '/fluxor-php/',
     description: 'Lightweight PHP MVC framework with file-based routing',
     themeConfig: {
-        logo: '/logo.svg',
+        logo: '/fluxor.svg',
         nav: [
             { text: 'Guide', link: '/guide/' },
             { text: 'API', link: '/api/' },
@@ -25,7 +26,8 @@ export default {
                         { text: 'Flow Syntax', link: '/guide/flow-syntax' },
                         { text: 'Views', link: '/guide/views' },
                         { text: 'Controllers', link: '/guide/controllers' },
-                        { text: 'Middleware', link: '/guide/middleware' }
+                        { text: 'Middleware', link: '/guide/middleware' },
+                        { text: 'Error Handling', link: '/guide/error-handling' }
                     ]
                 }
             ],
@@ -36,13 +38,14 @@ export default {
                         { text: 'App', link: '/api/app' },
                         { text: 'Request', link: '/api/request' },
                         { text: 'Response', link: '/api/response' },
-                        { text: 'Flow', link: '/api/flow' }
+                        { text: 'Flow', link: '/api/flow' },
+                        { text: 'HttpStatusCode', link: '/api/http-status-code' }
                     ]
                 }
             ]
         },
         socialLinks: [
-            { icon: 'github', link: 'https://github.com/lizzyman04/fluxor-php' }
+            { icon: 'github', link: 'https://github.com/lizzyman04/fluxor' }
         ],
         footer: {
             message: 'Released under the MIT License.',
