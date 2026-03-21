@@ -1,11 +1,12 @@
 # Flow Syntax
 
-The `Flow` class provides an elegant, chainable syntax for defining routes.
+The `Flow` class provides an elegant, chainable syntax for defining routes in file-based routing.
 
 ## Basic Usage
 
 ```php
 <?php
+// app/router/index.php
 use Fluxor\Flow;
 use Fluxor\Response;
 
@@ -30,6 +31,25 @@ Flow::PUT()->do(fn($req) => ...);
 Flow::PATCH()->do(fn($req) => ...);
 Flow::DELETE()->do(fn($req) => ...);
 Flow::ANY()->do(fn($req) => ...);  // Any method
+```
+
+## File-based Parameters
+
+In file-based routes, use `[param]` syntax in your filenames:
+
+```
+app/router/users/[id].php
+```
+
+Access the parameter:
+
+```php
+<?php
+// app/router/users/[id].php
+Flow::GET()->do(function($req) {
+    $id = $req->param('id');
+    return Response::json(['user' => $id]);
+});
 ```
 
 ## Controller Binding
@@ -58,10 +78,72 @@ Flow::GET()->name('home')->do(fn($req) => ...);
 $url = Flow::route('home');
 ```
 
-## Route Groups
+## Examples
 
+### RESTful API with File-based Routing
+
+Create the following structure:
+
+```
+app/router/
+└── api/
+    └── v1/
+        └── users/
+            ├── index.php      # GET /api/v1/users
+            ├── store.php      # POST /api/v1/users
+            └── [id].php       # GET/PUT/DELETE /api/v1/users/{id}
+```
+
+**`app/router/api/v1/users/index.php`**
 ```php
-Flow::group('/admin', ['auth'], function() {
-    Flow::GET()->do(fn($req) => Response::view('admin/dashboard'));
-    Flow::POST()->to(AdminController::class, 'update');
+<?php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::GET()->do(fn($req) => Response::json([
+    ['id' => 1, 'name' => 'John'],
+    ['id' => 2, 'name' => 'Jane']
+]));
+```
+
+**`app/router/api/v1/users/store.php`**
+```php
+<?php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::POST()->do(fn($req) => {
+    $data = $req->only(['name', 'email']);
+    return Response::success($data, 'User created', 201);
 });
+```
+
+**`app/router/api/v1/users/[id].php`**
+```php
+<?php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::GET()->do(function($req) {
+    $id = $req->param('id');
+    return Response::json(['id' => $id, 'name' => 'User ' . $id]);
+});
+
+Flow::PUT()->do(function($req) {
+    $id = $req->param('id');
+    $data = $req->only(['name', 'email']);
+    return Response::success(null, "User {$id} updated");
+});
+
+Flow::DELETE()->do(function($req) {
+    $id = $req->param('id');
+    return Response::success(null, "User {$id} deleted");
+});
+```
+
+## Notes
+
+- The `Flow` class uses magic methods to support HTTP verbs as static calls
+- Use `$req->param()` for route parameters, `$req->input()` for request data
+- For grouping routes, use subdirectories - it's simpler and follows the file-based routing philosophy
+- Middleware can be applied globally with `Flow::use()` or per-route using the Router

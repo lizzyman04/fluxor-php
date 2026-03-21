@@ -39,7 +39,8 @@ export default {
                         { text: 'Request', link: '/api/request' },
                         { text: 'Response', link: '/api/response' },
                         { text: 'Flow', link: '/api/flow' },
-                        { text: 'HttpStatusCode', link: '/api/http-status-code' }
+                        { text: 'HttpStatusCode', link: '/api/http-status-code' },
+                        { text: 'Helpers', link: '/api/helpers' }
                     ]
                 }
             ]

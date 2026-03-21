@@ -24,6 +24,7 @@ Access the parameter:
 
 ```php
 <?php
+// app/router/posts/[slug].php
 use Fluxor\Flow;
 use Fluxor\Response;
 
@@ -60,11 +61,78 @@ app/router/api/users.php           # GET /api/users
 app/router/api/users/[id].php      # GET /api/users/{id}
 ```
 
-## Route Examples
+## Grouping Routes
 
-Your current project includes working examples:
+To group related routes, use subdirectories:
 
-- `app/router/index.php` - Home page
-- `app/router/api/hello/index.php` - API example
-- `app/router/auth/login.php` - Authentication routes
-- `app/router/posts/[id]/comments.php` - Nested dynamic routes
+```
+app/router/
+├── admin/
+│   ├── dashboard.php      # /admin/dashboard
+│   ├── users.php          # /admin/users
+│   └── settings.php       # /admin/settings
+└── api/
+    └── v1/
+        ├── users.php      # /api/v1/users
+        └── posts.php      # /api/v1/posts
+```
+
+This is the recommended way to organize routes in Fluxor.
+
+## Complete Example: User API
+
+```
+app/router/
+└── api/
+    └── v1/
+        └── users/
+            ├── index.php      # GET /api/v1/users
+            ├── store.php      # POST /api/v1/users
+            └── [id].php       # GET /api/v1/users/{id}
+```
+
+**`app/router/api/v1/users/index.php`**
+```php
+<?php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::GET()->do(fn($req) => Response::json([
+    ['id' => 1, 'name' => 'John'],
+    ['id' => 2, 'name' => 'Jane']
+]));
+```
+
+**`app/router/api/v1/users/store.php`**
+```php
+<?php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::POST()->do(fn($req) => {
+    $data = $req->only(['name', 'email']);
+    return Response::success($data, 'User created', 201);
+});
+```
+
+**`app/router/api/v1/users/[id].php`**
+```php
+<?php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::GET()->do(function($req) {
+    $id = $req->param('id');
+    return Response::json(['id' => $id, 'name' => 'User ' . $id]);
+});
+
+Flow::PUT()->do(function($req) {
+    $id = $req->param('id');
+    $data = $req->only(['name', 'email']);
+    return Response::success(null, "User {$id} updated");
+});
+
+Flow::DELETE()->do(function($req) {
+    $id = $req->param('id');
+    return Response::success(null, "User {$id} deleted");
+});

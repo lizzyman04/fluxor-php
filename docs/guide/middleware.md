@@ -32,15 +32,16 @@ Flow::use(function($request) {
 
 ### Route-Specific Middleware
 
+For route-specific middleware, you can use the `use()` method before defining the route:
+
 ```php
 use Fluxor\Flow;
 
 $auth = fn($req) => $req->isAuthenticated() ? null : Response::redirect('/login');
 
-Flow::group('/admin', [$auth], function() {
-    Flow::GET()->do(fn($req) => Response::view('admin/dashboard'));
-    Flow::POST()->to(AdminController::class, 'update');
-});
+// Apply middleware to a specific route
+Flow::use($auth);
+Flow::GET('/admin/dashboard')->do(fn($req) => Response::view('admin/dashboard'));
 ```
 
 ### Router Middleware
@@ -78,4 +79,28 @@ $throttle = function($request) {
     $_SESSION[$key] = $attempts + 1;
     return null;
 };
+
+Flow::use($throttle);
 ```
+
+## Middleware Order
+
+Middleware is executed in the order it is registered:
+
+```php
+// Executed first
+Flow::use(fn($req) => error_log('First'));
+
+// Executed second
+Flow::use(fn($req) => error_log('Second'));
+
+// Executed third (if no middleware returns a response)
+Flow::GET()->do(fn($req) => Response::text('Hello'));
+```
+
+## Notes
+
+- Middleware can be used for authentication, logging, CORS, rate limiting, etc.
+- Use `Flow::use()` for global middleware that applies to all routes
+- For route-specific middleware, use `Flow::use()` just before defining the route
+- Middleware that returns a `Response` stops the execution chain

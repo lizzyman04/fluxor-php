@@ -37,12 +37,16 @@ class HomeController extends Controller
 
 ```php
 <?php
+// app/router/index.php
 use App\HomeController;
 use App\UserController;
 use Fluxor\Flow;
 
 Flow::GET()->to(HomeController::class, 'index');
-Flow::GET('/users/{id}')->to(UserController::class, 'show');
+
+// With dynamic parameters from file-based routing
+// app/router/users/[id].php
+Flow::GET()->to(UserController::class, 'show');
 ```
 
 ## Available Methods
@@ -102,3 +106,16 @@ class AuthController extends Controller
         return $this->redirect('/');
     }
 }
+```
+
+## Route Files with Controllers
+
+```php
+// app/router/auth/login.php
+use App\Controllers\AuthController;
+
+Flow::GET()->to(AuthController::class, 'showLogin');
+Flow::POST()->to(AuthController::class, 'login');
+
+// app/router/auth/logout.php
+Flow::GET()->to(AuthController::class, 'logout');
