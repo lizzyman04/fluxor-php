@@ -10,21 +10,21 @@ use Composer\IO\IOInterface;
 class UserInputCollector
 {
     private IOInterface $io;
-    
+
     public function __construct(IOInterface $io)
     {
         $this->io = $io;
     }
-    
+
     public function collect(): array
     {
         $this->displayHeader();
-        
+
         $name = $this->askName();
         $email = $this->askEmail();
         $homepage = $this->askHomepage();
         $vendor = $this->askVendor();
-        
+
         return [
             'name' => $name,
             'email' => $email,
@@ -32,13 +32,13 @@ class UserInputCollector
             'vendor' => $vendor,
         ];
     }
-    
+
     private function displayHeader(): void
     {
         $this->io->write("\n<info>👤 Author Information</info>");
         $this->io->write("----------------------------------------");
     }
-    
+
     private function askName(): string
     {
         return $this->io->ask(
@@ -46,7 +46,7 @@ class UserInputCollector
             'Fluxor User'
         );
     }
-    
+
     private function askEmail(): string
     {
         return $this->io->askAndValidate(
@@ -62,7 +62,7 @@ class UserInputCollector
             'user@example.com'
         );
     }
-    
+
     private function askHomepage(): string
     {
         return $this->io->askAndValidate(
@@ -78,7 +78,7 @@ class UserInputCollector
             'https://example.com'
         );
     }
-    
+
     private function askVendor(): string
     {
         return $this->io->askAndValidate(

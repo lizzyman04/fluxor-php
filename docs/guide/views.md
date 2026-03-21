@@ -100,3 +100,29 @@ Include other views:
 <?= View::e($userInput) ?>  // Escaped HTML
 <?= View::raw($html) ?>      // Raw HTML (use carefully!)
 ```
+
+## Error Views
+
+Create custom error pages in `src/Views/errors/`:
+
+```
+src/Views/errors/
+├── 404.php      # Custom 404 page
+├── 500.php      # Custom 500 page
+└── common.php   # Generic error template (fallback)
+```
+
+Each error view receives `$statusCode` and `$message` variables:
+
+```php
+<!DOCTYPE html>
+<html>
+<head>
+    <title><?= $statusCode ?> - <?= $message ?></title>
+</head>
+<body>
+    <h1><?= $statusCode ?></h1>
+    <p><?= $message ?></p>
+</body>
+</html>
+```

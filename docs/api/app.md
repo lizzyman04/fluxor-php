@@ -63,7 +63,7 @@ $config = $app->getConfig();
 
 ### `getService(string $name)`
 
-Retrieves a registered service from the container.
+Retrieves a signuped service from the container.
 
 ```php
 $view = $app->getService('view');

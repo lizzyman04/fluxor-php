@@ -3,7 +3,6 @@
  * Fluxor Installer - Main Entry Point
  * 
  * This script runs during composer create-project to set up the project.
- * It orchestrates the entire installation process.
  */
 
 namespace FluxorInstaller;
@@ -17,7 +16,6 @@ class Installer
     private string $projectDir;
     private array $userInfo;
     private array $config;
-    private string $template;
 
     public static function postCreateProject(Event $event): void
     {
@@ -33,74 +31,117 @@ class Installer
 
     private function run(): void
     {
-        $this->displayWelcome();
-        
+        $this->welcome();
+
         try {
-            $collector = new UserInputCollector($this->io);
-            $this->userInfo = $collector->collect();
-            
-            $templateManager = new TemplateManager($this->io);
-            $this->template = $templateManager->selectTemplate();
-            
-            $configGenerator = new ConfigGenerator($this->io);
-            $this->config = $configGenerator->collect($this->template);
-            
-            $fileManager = new FileManager($this->io, $this->projectDir);
-            $fileManager->copyTemplate($this->template);
-            
-            $configGenerator->generateEnvFile($this->projectDir, $this->config);
-            $configGenerator->updateComposerJson($this->projectDir, $this->config, $this->userInfo);
-            
-            $cleanup = new CleanupManager($this->io, $this->projectDir);
-            $cleanup->clean();
-            
-            $this->showNextSteps();
-            $this->displaySuccess();
-            
+            $this->gatherUserInfo();
+            $this->gatherConfiguration();
+            $this->gatherFeatures();
+
+            $this->setupProject();
+
+            $this->success();
+
         } catch (\Exception $e) {
             $this->handleError($e);
         }
     }
 
-    private function displayWelcome(): void
+    private function gatherUserInfo(): void
     {
-        $this->io->write([
-            "\n<info>✨ Welcome to Fluxor PHP Framework ✨</info>",
-            "<comment>Let's configure your new project in just a few steps.</comment>\n"
-        ]);
+        $collector = new UserInputCollector($this->io);
+        $this->userInfo = $collector->collect();
+    }
+
+    private function gatherConfiguration(): void
+    {
+        $generator = new ConfigGenerator($this->io);
+        $this->config = $generator->collect();
+    }
+
+    private function gatherFeatures(): void
+    {
+        $features = new FeatureSelector($this->io);
+        $this->config = array_merge($this->config, $features->select());
+    }
+
+    private function setupProject(): void
+    {
+        $this->io->write("\n<info>📦 Setting up your Fluxor project...</info>");
+
+        $env = new EnvGenerator($this->io, $this->projectDir);
+        $env->generate($this->config);
+
+        $composer = new ComposerUpdater($this->io, $this->projectDir);
+        $composer->update($this->config, $this->userInfo);
+
+        $cleanup = new FeatureCleanup($this->io, $this->projectDir);
+        $cleanup->removeUnwantedFeatures($this->config);
+
+        $storage = new StorageManager($this->io, $this->projectDir);
+        $storage->createDirectories();
+
+        $this->showNextSteps();
     }
 
     private function showNextSteps(): void
     {
-        $steps = TemplateManager::getNextSteps($this->template);
-        
-        $this->io->write("\n<info>🎯 Next Steps:</info>");
-        $this->io->write("----------------------------------------");
-        
-        foreach ($steps as $index => $step) {
-            $step = str_replace('{port}', $this->config['app_port'], $step);
-            $this->io->write(sprintf("  %d. %s", $index + 1, $step));
-        }
-        
-        $this->io->write("\n<comment>📚 Documentation: https://lizzyman04.github.io/fluxor-php</comment>");
+        $steps = new NextSteps($this->io);
+        $steps->show($this->config);
     }
 
-    private function displaySuccess(): void
+    private function welcome(): void
     {
-        $this->io->write("\n<info>✅ Fluxor project created successfully! Happy coding! 🚀</info>\n");
+        $this->io->write([
+            "\n<info>╔══════════════════════════════════════════════════════════════╗</info>",
+            "<info>║                   Fluxor PHP Framework                        ║</info>",
+            "<info>║                  Interactive Installation                     ║</info>",
+            "<info>╚══════════════════════════════════════════════════════════════╝</info>",
+            "\n<comment>We'll configure your project based on your needs.</comment>",
+            "<comment>You can always add features later by creating the necessary files.</comment>\n"
+        ]);
+    }
+
+    private function success(): void
+    {
+        $this->io->write([
+            "\n<info>╔══════════════════════════════════════════════════════════════╗</info>",
+            "<info>║                    Installation Complete!                     ║</info>",
+            "<info>╚══════════════════════════════════════════════════════════════╝</info>",
+            "\n<info>✅ Fluxor project created successfully! Happy coding! 🚀</info>\n"
+        ]);
     }
 
     private function handleError(\Exception $e): void
     {
         $this->io->writeError("\n<error>❌ Installation failed: " . $e->getMessage() . "</error>\n");
-        
-        try {
-            $cleanup = new CleanupManager($this->io, $this->projectDir);
-            $cleanup->emergencyCleanup();
-            $this->io->writeError("<comment>Emergency cleanup performed.</comment>");
-        } catch (\Exception $cleanupError) {
-        }
-        
+
+        $this->io->writeError("<comment>Cleaning up...</comment>");
+        $this->removeDirectory($this->projectDir . '/installer');
+
         exit(1);
+    }
+
+    private function removeDirectory(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $items = scandir($dir);
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $path = $dir . '/' . $item;
+            if (is_dir($path)) {
+                $this->removeDirectory($path);
+            } else {
+                unlink($path);
+            }
+        }
+
+        rmdir($dir);
     }
 }

@@ -6,13 +6,13 @@ Fluxor provides a set of global helper functions to simplify common tasks.
 
 ### `app(?string $service = null)`
 
-Returns the application instance or a registered service.
+Returns the application instance or a signuped service.
 
 ```php
 // Get application instance
 $app = app();
 
-// Get a registered service
+// Get a signuped service
 $view = app('view');
 $router = app('router');
 $config = app('config');
@@ -186,7 +186,7 @@ DB_PASSWORD=secret
 
 - All helper functions are globally available without namespaces
 - Functions are only defined if they don't already exist (safe to use)
-- The `app()` function can access any registered service
+- The `app()` function can access any signuped service
 - Use `dd()` for quick debugging, remove before production
 - `abort()` is useful for early error handling in routes
 - Environment variables support interpolation: `APP_URL=${BASE_URL}/api`

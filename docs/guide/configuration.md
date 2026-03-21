@@ -19,6 +19,32 @@ cp .env.example .env
 | `APP_TIMEZONE` | Timezone | UTC |
 | `APP_KEY` | Application key (auto-generated) | - |
 
+### Authentication Configuration (if enabled)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `AUTH_SECRET_KEY` | Secret key for token generation | auto-generated |
+| `AUTH_SESSION_EXPIRY` | Session expiry in seconds | 1800 |
+| `AUTH_REMEMBER_EXPIRY` | Remember token expiry | 2592000 |
+
+### Mailer Configuration (if enabled)
+
+| Variable | Description |
+|----------|-------------|
+| `MAIL_HOST` | SMTP server hostname |
+| `MAIL_PORT` | SMTP port (587 for TLS, 465 for SSL) |
+| `MAIL_USERNAME` | SMTP username |
+| `MAIL_PASSWORD` | SMTP password |
+| `MAIL_FROM_ADDRESS` | Default sender email |
+| `MAIL_FROM_NAME` | Default sender name |
+
+### Uploader Configuration (if enabled)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `UPLOAD_MAX_SIZE` | Maximum file size in bytes | 5242880 (5MB) |
+| `UPLOAD_ALLOWED_TYPES` | Allowed file extensions | jpg,jpeg,png,gif,webp,pdf,doc,docx |
+
 ## Application Configuration
 
 You can also configure paths programmatically:

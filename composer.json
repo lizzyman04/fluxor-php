@@ -19,7 +19,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "Core\\": "app/core/"
         },
         "classmap": [
             "installer/"
@@ -28,9 +29,7 @@
     "scripts": {
         "post-create-project-cmd": [
             "FluxorInstaller\\Installer::postCreateProject"
-        ],
-        "serve": "php -S localhost:8000 -t public",
-        "test": "phpunit"
+        ]
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

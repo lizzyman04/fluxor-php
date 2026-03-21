@@ -85,7 +85,7 @@ Flow::use($throttle);
 
 ## Middleware Order
 
-Middleware is executed in the order it is registered:
+Middleware is executed in the order it is signuped:
 
 ```php
 // Executed first
