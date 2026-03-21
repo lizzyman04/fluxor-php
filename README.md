@@ -19,7 +19,7 @@ The documentation includes:
 - Controllers and middleware
 - Environment configuration
 - Complete API reference with helper functions
-- Template options (Default, MVC, API)
+- Interactive installation guide
 
 ## 🚀 Quick Start
 
@@ -36,40 +36,62 @@ composer dev
 
 Visit `http://localhost:8000`
 
+## ✨ Interactive Installation
+
+During installation, you'll be asked to configure your project:
+
+### Author Information
+- Your name, email, website
+- Vendor name for Composer package
+
+### Application Configuration
+- Application name
+- Environment (development/production/testing)
+- Debug mode
+- Development server port
+- Timezone
+
+### Optional Features
+You can choose which features to include:
+
+| Feature | Description |
+|---------|-------------|
+| **🔐 Authentication** | User authentication with sessions, "remember me", and CSRF protection |
+| **📧 Mailer** | Email sending with SMTP support and HTML templates |
+| **📁 Uploader** | Secure file upload with hash-based naming and duplicate prevention |
+
+The installer automatically removes files for features you don't select, keeping your project clean and focused.
+
 ## 📁 Project Structure
+
+After installation, your project will contain:
 
 ```
 my-app/
 ├── app/
-│   └── router/              # File-based routes (like Next.js)
-│       ├── index.php        # GET /
-│       ├── users/
-│       │   └── [id].php     # GET /users/{id}
-│       └── api/
-│           └── hello/
-│               └── index.php  # GET /api/hello
+│   ├── core/              # Core helpers (Auth, Mailer, Uploader)
+│   └── router/            # File-based routes (like Next.js)
+│       ├── index.php      # GET /
+│       ├── about.php      # GET /about
+│       └── auth/          # Authentication routes (if enabled)
+│           ├── login.php
+│           ├── register.php
+│           └── logout.php
 ├── public/
-│   └── index.php            # Front controller
+│   ├── index.php          # Front controller
+│   └── uploads/           # Uploaded files (if uploader enabled)
 ├── src/
-│   ├── Controllers/         # Your controllers (MVC template)
-│   ├── Views/               # View templates
-│   │   ├── layouts/         # Layout templates
-│   │   └── errors/          # Custom error pages (404, 500, etc.)
-│   └── Helpers/             # Custom helper functions
-├── storage/                 # Logs, cache, sessions
-├── .env                     # Environment configuration
-└── composer.json            # Project dependencies
+│   ├── Controllers/       # Application controllers (if auth enabled)
+│   ├── Models/            # Database models (if auth enabled)
+│   └── Views/             # View templates
+│       ├── layouts/       # Layout templates
+│       ├── auth/          # Authentication views (if auth enabled)
+│       ├── home.php
+│       └── about.php
+├── storage/               # Logs, cache, sessions
+├── .env                   # Environment configuration
+└── composer.json          # Project dependencies
 ```
-
-## 🎯 Available Templates
-
-During installation, you can choose from three templates:
-
-| Template | Description |
-|----------|-------------|
-| **Default** | Minimal starter with basic routing and clean structure |
-| **MVC** | Complete MVC with authentication, views, and controllers |
-| **API** | Lightweight RESTful API with CORS and JSON responses |
 
 ## 💎 Example: Hello World
 
@@ -91,6 +113,9 @@ Flow::GET()->do(fn($req) =>
 |---------|-------------|
 | **🎯 File-based Routing** | Routes defined by folder structure - like Next.js |
 | **💎 Flow Syntax** | Ultra-clean, chainable route definitions |
+| **🔐 Authentication** | Optional built-in auth with remember me and CSRF |
+| **📧 Mailer** | Optional SMTP email support with templates |
+| **📁 Uploader** | Optional secure file upload with hash naming |
 | **🔄 MVC Architecture** | Clean separation with Controllers and Views |
 | **🎨 View System** | Layouts, sections, stacks, and partials |
 | **🛡️ Security First** | Built-in CSRF, XSS protection, secure sessions |

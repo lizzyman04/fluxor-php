@@ -75,19 +75,14 @@ class Installer
         $composer = new ComposerUpdater($this->io, $this->projectDir);
         $composer->update($this->config, $this->userInfo);
 
-        $cleanup = new FeatureCleanup($this->io, $this->projectDir);
-        $cleanup->removeUnwantedFeatures($this->config);
-
         $storage = new StorageManager($this->io, $this->projectDir);
         $storage->createDirectories();
 
-        $this->showNextSteps();
-    }
-
-    private function showNextSteps(): void
-    {
         $steps = new NextSteps($this->io);
         $steps->show($this->config);
+
+        $cleanup = new FeatureCleanup($this->io, $this->projectDir);
+        $cleanup->removeUnwantedFeatures($this->config);
     }
 
     private function welcome(): void
