@@ -101,7 +101,7 @@ Organize your application logic
 class UserController extends Controller
 {
     public function index() {
-        return $this->json(User::all());
+        return Response::json(User::all());
     }
 }
 ```
