@@ -37,10 +37,6 @@ Flow::GET()->do(function($req) {
 });
 ```
 
-## Need More Features?
-
-For authentication, mailer, and uploader, check out: [github.com/lizzyman04/fluxor-mvc-template](https://github.com/lizzyman04/fluxor-mvc-template)
-
 ## Next Steps
 
 - [Installation](/guide/installation)

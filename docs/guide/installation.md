@@ -63,6 +63,10 @@ my-app/
 └── composer.json          # Project dependencies
 ```
 
+## Need More Features?
+
+For authentication, mailer, and uploader, check out: [github.com/lizzyman04/fluxor-mvc-template](https://github.com/lizzyman04/fluxor-mvc-template)
+
 ## Next Steps
 
 - Configure your `.env` file with database and other settings

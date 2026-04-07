@@ -1,25 +1,35 @@
-# Fluxor PHP Framework 🚀
+<div align="center">
+  <img src="https://raw.githubusercontent.com/lizzyman04/fluxor-php/main/public/assets/img/fluxor.svg" width="120" alt="Fluxor Logo">
+  <h1>Fluxor PHP Framework</h1>
+  <p><strong>The lightweight PHP framework with file-based routing and elegant Flow syntax.</strong></p>
+  
+  <!-- Badges do Skeleton (fluxor-php) -->
+  [![Latest Stable Version](https://poser.pugx.org/lizzyman04/fluxor-php/v/stable)](https://packagist.org/packages/lizzyman04/fluxor-php) [![Total Downloads](https://poser.pugx.org/lizzyman04/fluxor-php/downloads)](https://packagist.org/packages/lizzyman04/fluxor-php) [![License](https://poser.pugx.org/lizzyman04/fluxor-php/license)](https://packagist.org/packages/lizzyman04/fluxor-php) [![PHP Version Require](https://poser.pugx.org/lizzyman04/fluxor-php/require/php)](https://packagist.org/packages/lizzyman04/fluxor-php)
 
-**The lightweight PHP framework with file-based routing and elegant Flow syntax.**
+  <sub>Powered by <a href="https://github.com/lizzyman04/fluxor">Fluxor Core</a> [![Core Version](https://poser.pugx.org/lizzyman04/fluxor/v/stable)](https://packagist.org/packages/lizzyman04/fluxor) [![Core Downloads](https://poser.pugx.org/lizzyman04/fluxor/downloads)](https://packagist.org/packages/lizzyman04/fluxor)</sub>
+  
+  <p>
+    <a href="https://lizzyman04.github.io/fluxor-php">📚 Documentation</a> •
+    <a href="https://github.com/lizzyman04/fluxor">🐙 GitHub </a> •
+    <a href="https://packagist.org/packages/lizzyman04/fluxor-php">📦 Packagist</a>
+  </p>
+</div>
 
-[![Latest Stable Version](https://poser.pugx.org/lizzyman04/fluxor-php/v/stable)](https://packagist.org/packages/lizzyman04/fluxor-php)
-[![Total Downloads](https://poser.pugx.org/lizzyman04/fluxor-php/downloads)](https://packagist.org/packages/lizzyman04/fluxor-php)
-[![License](https://poser.pugx.org/lizzyman04/fluxor-php/license)](https://packagist.org/packages/lizzyman04/fluxor-php)
-[![PHP Version Require](https://poser.pugx.org/lizzyman04/fluxor-php/require/php)](https://packagist.org/packages/lizzyman04/fluxor-php)
+<br>
 
 ## 📖 Documentation
 
 **Full documentation available at:** 👉 [**https://lizzyman04.github.io/fluxor-php**](https://lizzyman04.github.io/fluxor-php)
 
 The documentation includes:
-- Installation guide
-- File-based routing (Next.js style)
-- Flow syntax reference
-- Views and layouts
-- Controllers and middleware
-- Environment configuration
-- Complete API reference with helper functions
-- Interactive installation guide
+- 📚 Installation guide
+- 🎯 File-based routing (Next.js style)
+- 💎 Flow syntax reference
+- 🎨 Views and layouts
+- 🔧 Controllers and middleware
+- ⚙️ Environment configuration
+- 📖 Complete API reference with helper functions
+- 🚀 Interactive installation guide
 
 ## 🚀 Quick Start
 
@@ -36,31 +46,98 @@ composer dev
 
 Visit `http://localhost:8000`
 
-## ✨ Interactive Installation
+## ✨ Features at a Glance
 
-During installation, you'll be asked to configure your project:
+<table align="center">
+<tr>
+<td width="50%">
 
-### Author Information
-- Your name, email, website
-- Vendor name for Composer package
+### 🎯 File-based Routing
+Routes defined by folder structure - like Next.js
 
-### Application Configuration
-- Application name
-- Environment (development/production/testing)
-- Debug mode
-- Development server port
-- Timezone
+```php
+app/router/
+├── index.php           # GET /
+├── api/
+│   ├── users.php       # GET /api/users
+│   └── users/[id].php  # GET /api/users/123
+```
 
-### Optional Features
-You can choose which features to include:
+</td>
+<td width="50%">
 
-| Feature | Description |
-|---------|-------------|
-| **🔐 Authentication** | User authentication with sessions, "remember me", and CSRF protection |
-| **📧 Mailer** | Email sending with SMTP support and HTML templates |
-| **📁 Uploader** | Secure file upload with hash-based naming and duplicate prevention |
+### 💎 Elegant Flow Syntax
+Ultra-clean, chainable route definitions
 
-The installer automatically removes files for features you don't select, keeping your project clean and focused.
+```php
+Flow::GET()->do(function($req) {
+    $id = $req->param('id');
+    return Response::json(['user' => $id]);
+});
+```
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🎨 Views & Layouts
+Template system with sections and layouts
+
+```php
+View::extend('layouts/main');
+View::section('content');
+    <h1>Hello World</h1>
+View::endSection();
+```
+
+</td>
+<td width="50%">
+
+### 🔧 Controllers
+Organize your application logic
+
+```php
+class UserController extends Controller
+{
+    public function index() {
+        return $this->json(User::all());
+    }
+}
+```
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🛡️ Middleware & Security
+CSRF protection, sessions, request filtering
+
+```php
+Flow::use(function($req) {
+    if (!$req->isAuthenticated()) {
+        return redirect('/login');
+    }
+});
+```
+
+</td>
+<td width="50%">
+
+### 🛠️ Utilities & Helpers
+Global helpers for common tasks
+
+```php
+$url = base_url('api/users');
+$path = base_path('storage/logs');
+$debug = env('APP_DEBUG', false);
+abort(404, 'Not Found');
+```
+
+</td>
+</tr>
+</table>
 
 ## 📁 Project Structure
 
@@ -69,31 +146,23 @@ After installation, your project will contain:
 ```
 my-app/
 ├── app/
-│   ├── core/              # Core helpers (Auth, Mailer, Uploader)
-│   └── router/            # File-based routes (like Next.js)
+│   └── router/            # File-based routes
 │       ├── index.php      # GET /
-│       ├── about.php      # GET /about
-│       └── auth/          # Authentication routes (if enabled)
-│           ├── login.php
-│           ├── register.php
-│           └── logout.php
+│       └── api/
+│           └── users/     # REST API examples
 ├── public/
 │   ├── index.php          # Front controller
-│   └── uploads/           # Uploaded files (if uploader enabled)
+│   └── assets/            # Static assets
 ├── src/
-│   ├── Controllers/       # Application controllers (if auth enabled)
-│   ├── Models/            # Database models (if auth enabled)
 │   └── Views/             # View templates
-│       ├── layouts/       # Layout templates
-│       ├── auth/          # Authentication views (if auth enabled)
-│       ├── home.php
-│       └── about.php
+│       ├── layouts/
+│       └── home.php
 ├── storage/               # Logs, cache, sessions
 ├── .env                   # Environment configuration
 └── composer.json          # Project dependencies
 ```
 
-## 💎 Example: Hello World
+## 💎 Quick Example
 
 ```php
 <?php
@@ -111,24 +180,50 @@ Flow::GET()->do(fn($req) =>
 
 | Feature | Description |
 |---------|-------------|
-| **🎯 File-based Routing** | Routes defined by folder structure - like Next.js |
-| **💎 Flow Syntax** | Ultra-clean, chainable route definitions |
-| **🔐 Authentication** | Optional built-in auth with remember me and CSRF |
-| **📧 Mailer** | Optional SMTP email support with templates |
-| **📁 Uploader** | Optional secure file upload with hash naming |
-| **🔄 MVC Architecture** | Clean separation with Controllers and Views |
-| **🎨 View System** | Layouts, sections, stacks, and partials |
-| **🛡️ Security First** | Built-in CSRF, XSS protection, secure sessions |
-| **🚦 Middleware** | Flexible request filtering (global + per-route) |
-| **🎭 Error Handling** | Hierarchical error pages (404, 500, etc.) |
-| **🔧 Zero Config** | Auto-detects base path and URL |
-| **🌍 Environment Support** | Built-in .env file parser with type casting |
-| **⚡ Performance** | Boot under 10ms, memory footprint ~2MB |
+| 🎯 **File-based Routing** | Routes defined by folder structure - like Next.js |
+| 💎 **Flow Syntax** | Ultra-clean, chainable route definitions |
+| 🎨 **View System** | Layouts, sections, stacks, and partials |
+| 🔧 **Controllers** | MVC architecture with base controller |
+| 🛡️ **Security First** | Built-in CSRF, XSS protection, secure sessions |
+| 🚦 **Middleware** | Flexible request filtering (global + per-route) |
+| 🎭 **Error Handling** | Hierarchical error pages (404, 500, etc.) |
+| 🔧 **Zero Config** | Auto-detects base path and URL |
+| 🌍 **Environment Support** | Built-in .env file parser with type casting |
+| 🛠️ **Utilities** | Global helpers (`env()`, `base_path()`, `abort()`, etc.) |
+| ⚡ **Performance** | Boot under 10ms, memory footprint ~2MB |
+| 📦 **Zero Dependencies** | Just pure PHP, no external packages |
 
-## 📦 Requirements
+## 📊 Stats & Star History
+
+<div align="center">
+
+| Fluxor PHP (Skeleton) | Fluxor Core (Engine) |
+|:---------------------:|:--------------------:|
+| ![GitHub Last Commit](https://img.shields.io/github/last-commit/lizzyman04/fluxor-php?style=flat-square) ![Packagist Stars](https://img.shields.io/packagist/stars/lizzyman04/fluxor-php?style=flat-square) | ![Core Release](https://img.shields.io/github/v/release/lizzyman04/fluxor?style=flat-square&label=Release) ![Core Last Commit](https://img.shields.io/github/last-commit/lizzyman04/fluxor?style=flat-square) ![Core Downloads](https://img.shields.io/packagist/dt/lizzyman04/fluxor?style=flat-square) |
+
+</div>
+
+<a href="https://www.star-history.com/?repos=lizzyman04%2Ffluxor-php%2Clizzyman04%2Ffluxor&type=date&legend=bottom-right">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=lizzyman04/fluxor-php%2Clizzyman04/fluxor&type=date&theme=dark&legend=bottom-right" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=lizzyman04/fluxor-php%2Clizzyman04/fluxor&type=date&legend=bottom-right" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=lizzyman04/fluxor-php%2Clizzyman04/fluxor&type=date&legend=bottom-right" />
+ </picture>
+</a>
+
+## 🚦 Requirements
 
 - PHP 8.1 or higher
 - Composer
+- Web server (Apache/Nginx) or PHP built-in server
+
+## 📦 Installation
+
+```bash
+composer create-project lizzyman04/fluxor-php my-app
+cd my-app
+composer dev
+```
 
 ## 📄 License
 
