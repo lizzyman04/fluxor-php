@@ -24,7 +24,7 @@ class Setup
         $this->createStorageDirectories();
         $this->updateReadme($appConfig, $features);
 
-        $this->io->write("\n  - Project configured successfully");
+        $this->io->write("  - Project configured successfully");
     }
 
     private function updateComposer(array $userConfig, array $appConfig): void

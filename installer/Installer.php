@@ -45,8 +45,8 @@ class Installer
         $io = $this->event->getIO();
         $io->write([
             "\n<info>╔══════════════════════════════════════════════════════════════╗</info>",
-            "<info>║                   Fluxor PHP Framework                        ║</info>",
-            "<info>║                  Interactive Installation                     ║</info>",
+            "<info>║                   Fluxor PHP Framework                       ║</info>",
+            "<info>║                  Interactive Installation                    ║</info>",
             "<info>╚══════════════════════════════════════════════════════════════╝</info>\n"
         ]);
     }
@@ -54,11 +54,19 @@ class Installer
     private function success(): void
     {
         $io = $this->event->getIO();
+        $port = $this->appConfig['app_port'] ?? 8000;
         $io->write([
             "\n<info>╔══════════════════════════════════════════════════════════════╗</info>",
-            "<info>║                    Installation Complete!                     ║</info>",
+            "<info>║                    Installation Complete!                    ║</info>",
             "<info>╚══════════════════════════════════════════════════════════════╝</info>",
-            "\n<info>✅ Fluxor project created successfully! Happy coding! 🚀</info>\n"
+            "\n<info>✅ Fluxor project created successfully! Happy coding! 🚀</info>\n",
+            "",
+            "<comment>Next Steps:</comment>",
+            "  1. cd " . basename(getcwd()),
+            "  2. Start the development server: composer dev",
+            "  3. Visit: http://localhost:{$port}",
+            "",
+            "<info>Happy coding!</info>\n"
         ]);
     }
 }
