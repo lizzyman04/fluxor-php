@@ -19,32 +19,6 @@ cp .env.example .env
 | `APP_TIMEZONE` | Timezone | UTC |
 | `APP_KEY` | Application key (auto-generated) | - |
 
-### Authentication Configuration (if enabled)
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `AUTH_SECRET_KEY` | Secret key for token generation | auto-generated |
-| `AUTH_SESSION_EXPIRY` | Session expiry in seconds | 1800 |
-| `AUTH_REMEMBER_EXPIRY` | Remember token expiry | 2592000 |
-
-### Mailer Configuration (if enabled)
-
-| Variable | Description |
-|----------|-------------|
-| `MAIL_HOST` | SMTP server hostname |
-| `MAIL_PORT` | SMTP port (587 for TLS, 465 for SSL) |
-| `MAIL_USERNAME` | SMTP username |
-| `MAIL_PASSWORD` | SMTP password |
-| `MAIL_FROM_ADDRESS` | Default sender email |
-| `MAIL_FROM_NAME` | Default sender name |
-
-### Uploader Configuration (if enabled)
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `UPLOAD_MAX_SIZE` | Maximum file size in bytes | 5242880 (5MB) |
-| `UPLOAD_ALLOWED_TYPES` | Allowed file extensions | jpg,jpeg,png,gif,webp,pdf,doc,docx |
-
 ## Application Configuration
 
 You can also configure paths programmatically:
@@ -58,6 +32,57 @@ $app->setConfig([
 ]);
 ```
 
+## Config Locking
+
+Protect critical configuration keys from modification:
+
+```php
+$app = new Fluxor\App();
+
+// Lock specific keys
+$app->lockConfig('router_path', 'views_path');
+
+// Lock all configuration
+$app->lockConfig();
+
+// Check if a key is locked
+if ($app->isConfigLocked('router_path')) {
+    // Cannot modify
+}
+```
+
+## CORS Configuration
+
+Configure CORS globally or per route:
+
+### Global CORS
+
+```php
+$app = new Fluxor\App();
+$app->cors()
+    ->allowOrigin('https://myfrontend.com')
+    ->allowCredentials(true)
+    ->enable();
+$app->run();
+```
+
+### Per-route CORS
+
+```php
+// app/router/api/users.php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::cors([
+    'allowed_origins' => ['https://admin.example.com'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
+    'allowed_headers' => ['Content-Type', 'Authorization'],
+    'max_age' => 3600
+]);
+
+Flow::GET()->do(fn($req) => Response::json(['users' => []]));
+```
+
 ## Auto-detection
 
 Fluxor automatically detects:
@@ -65,4 +90,4 @@ Fluxor automatically detects:
 - **Base Path**: Root directory of your application
 - **Base URL**: Current URL (protocol, host, subdirectory)
 
-No configuration needed! 🚀
+No configuration needed!

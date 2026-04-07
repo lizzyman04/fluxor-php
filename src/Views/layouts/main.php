@@ -6,38 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= View::yield('title', 'Fluxor App') ?></title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        nav { background: #4f46e5; color: white; padding: 1rem; }
-        nav a { color: white; text-decoration: none; margin-right: 1rem; }
-        nav a:hover { text-decoration: underline; }
-        main { min-height: 80vh; padding: 2rem 0; }
-        footer { background: #f3f4f6; text-align: center; padding: 1rem; margin-top: 2rem; }
-        .card { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 1rem 0; }
-        .btn { display: inline-block; background: #4f46e5; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; }
-        .btn:hover { background: #4338ca; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;background:#fff;min-height:100vh}
+        .container{max-width:900px;margin:0 auto;padding:2rem}
+        .logo{text-align:center;margin-bottom:1rem}
+        .logo img{width:80px;height:80px}
+        .card{background:#fff;border-radius:12px;padding:1rem;}
+        .card h1{font-size:2rem;margin-bottom:1rem;color:#1a1a2e}
+        .card p{color:#4a5568;margin-bottom:1rem}
+        .card code{background:#f5f5f5;padding:0.2rem 0.5rem;border-radius:4px;font-family:monospace;font-size:0.9rem;color:#e53e3e}
+        .card a{color:#667eea;text-decoration:none}
+        .card a:hover{text-decoration:underline}
+        footer{text-align:center;margin-top:2rem;color:#a0aec0;font-size:0.875rem}
+        footer a{color:#667eea;text-decoration:none}
+        footer a:hover{text-decoration:underline}
     </style>
     <?= View::yield('styles') ?>
 </head>
 <body>
-    <nav>
-        <div class="container">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
+    <div class="container">
+        <div class="logo">
+            <img src="<?= asset('img/fluxor.svg') ?>" alt="Fluxor Logo">
         </div>
-    </nav>
-    <main>
-        <div class="container">
+        <div class="card">
             <?= View::yield('content') ?>
         </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; <?= date('Y') ?> Fluxor PHP Framework. All rights reserved.</p>
-        </div>
-    </footer>
+        <footer>
+            <p>⚡ Fluxor PHP Framework | <a href="https://lizzyman04.github.io/fluxor-php">Docs</a> | <a href="https://github.com/lizzyman04/fluxor">GitHub</a></p>
+        </footer>
+    </div>
     <?= View::yield('scripts') ?>
 </body>
 </html>

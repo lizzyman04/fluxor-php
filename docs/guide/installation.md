@@ -32,34 +32,16 @@ During installation, you'll be asked a few questions to configure your project:
 - Development server port
 - Timezone
 
-### Feature Selection
-You can choose which features to include:
-
-| Feature | Description |
-|---------|-------------|
-| **Authentication** | Built-in user authentication system with session management and "remember me" |
-| **Mailer** | Email sending functionality with SMTP support |
-| **Uploader** | Secure file upload handling with hash-based naming to prevent duplicates |
-
-### Feature Configuration
-
-If you select **Authentication**, you'll be prompted for:
-- Admin email
-- Admin password (default: admin123)
-
-If you select **Mailer**, you'll be prompted for:
-- SMTP host
-- SMTP port
-- SMTP username
-- SMTP password
+### Documentation
+- Whether to include project documentation (docs/ directory)
 
 ## After Installation
 
 The installer will:
 1. Create all necessary directories
-2. Generate `.env` and `.env.example` files
+2. Generate `.env` file with your configuration
 3. Update `composer.json` with your information
-4. Remove files for features you didn't select
+4. Remove installer files
 
 ## Project Structure
 
@@ -68,14 +50,14 @@ After installation, your project will contain:
 ```
 my-app/
 ├── app/
-│   ├── core/              # Core helpers
 │   └── router/            # File-based routes
 ├── public/
-│   └── index.php          # Front controller
+│   ├── index.php          # Front controller
+│   └── assets/            # Static assets (CSS, JS, images)
 ├── src/
-│   ├── Controllers/       # Your controllers
-│   ├── Models/            # Your models
 │   └── Views/             # View templates
+│       ├── layouts/       # Layout templates
+│       └── home.php       # Home page view
 ├── storage/               # Logs, cache, sessions
 ├── .env                   # Environment configuration
 └── composer.json          # Project dependencies

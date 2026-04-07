@@ -39,6 +39,8 @@ export default {
                         { text: 'Request', link: '/api/request' },
                         { text: 'Response', link: '/api/response' },
                         { text: 'Flow', link: '/api/flow' },
+                        { text: 'Fetch', link: '/api/fetch' },
+                        { text: 'Cors', link: '/api/cors' },
                         { text: 'HttpStatusCode', link: '/api/http-status-code' },
                         { text: 'Helpers', link: '/api/helpers' }
                     ]

@@ -18,48 +18,21 @@ composer.phar
 Thumbs.db
 
 # OS
-.DS_Store
-Thumbs.db
 desktop.ini
 ehthumbs.db
-*.swp
-*.swo
 
 # Logs
 *.log
-storage/*.log
-storage/logs/*.log
 
 # Cache
-storage/framework/cache/*
-storage/framework/sessions/*
-!storage/framework/.gitkeep
-storage/framework/views/*
-!storage/framework/.gitkeep
-
-# Tests
-tests/coverage/
-tests/coverage-html/
-.phpunit.result.cache
-.phpunit.cache
-
-# Documentation (Vitepress)
-node_modules/
-docs/.vitepress/dist/
-docs/.vitepress/cache/
-
-# Build outputs
-public/build/
 public/assets/build/
+public/build/
 
 # Temporary files
 *.tmp
 *.temp
 *.cache
 
-# PHP
+# Test files
+tests/coverage/
 .phpunit.result.cache
-*.log
-
-# Project specific
-.fluxor-installed

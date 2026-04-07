@@ -6,13 +6,13 @@ Fluxor provides a set of global helper functions to simplify common tasks.
 
 ### `app(?string $service = null)`
 
-Returns the application instance or a signuped service.
+Returns the application instance or a registered service.
 
 ```php
 // Get application instance
 $app = app();
 
-// Get a signuped service
+// Get a registered service
 $view = app('view');
 $router = app('router');
 $config = app('config');
@@ -69,6 +69,26 @@ $apiKey = env('API_KEY');
 ```
 
 ## HTTP Helpers
+
+### `fetch(string $method, string $url, $body = null): Fetch`
+
+Creates an HTTP request using the built-in Fetch client.
+
+```php
+// GET request
+$users = fetch('GET', 'https://api.example.com/users')->json();
+
+// POST request
+$user = fetch('POST', 'https://api.example.com/users', [
+    'name' => 'John',
+    'email' => 'john@example.com'
+])->json();
+
+// With headers
+$data = fetch('GET', 'https://api.example.com/me')
+    ->header('Authorization', 'Bearer token')
+    ->json();
+```
 
 ### `http_status_message(int $code): string`
 
@@ -131,6 +151,7 @@ dump($data, $meta);           // Prints multiple variables
 use Fluxor\Flow;
 use Fluxor\Response;
 use Fluxor\Exceptions\NotFoundException;
+use Fluxor\Fetch;
 
 Flow::GET()->do(function($req) {
     $userId = $req->param('id');
@@ -140,13 +161,8 @@ Flow::GET()->do(function($req) {
     $apiUrl = base_url('api/users');
     $isDebug = env('APP_DEBUG', false);
     
-    // Validate
-    if (!is_numeric($userId)) {
-        abort(400, 'Invalid user ID');
-    }
-    
-    // Find user (simulated)
-    $user = findUserById($userId);
+    // Make external API request
+    $user = fetch('GET', "https://api.example.com/users/{$userId}")->json();
     
     if (!$user) {
         throw new NotFoundException('User not found');
@@ -154,12 +170,11 @@ Flow::GET()->do(function($req) {
     
     // Debug in development
     if ($isDebug) {
-        dump($user);
+        dump($userData);
     }
     
-    return Response::success($user);
+    return Response::success($userData);
 });
-
 ```
 
 ## Environment File Example
@@ -186,9 +201,10 @@ DB_PASSWORD=secret
 
 - All helper functions are globally available without namespaces
 - Functions are only defined if they don't already exist (safe to use)
-- The `app()` function can access any signuped service
+- The `app()` function can access any registered service
 - Use `dd()` for quick debugging, remove before production
 - `abort()` is useful for early error handling in routes
+- The `fetch()` helper provides a convenient shortcut to the Fetch class
 - Environment variables support interpolation: `APP_URL=${BASE_URL}/api`
 - Boolean values are automatically cast: `true`, `false`, `null`
 - Multi-line values are supported with quotes
