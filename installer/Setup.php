@@ -48,7 +48,7 @@ class Setup
 
         unset($composer['scripts']['post-create-project-cmd']);
         $composer['scripts']['dev'] = "php -S localhost:{$appConfig['app_port']} -t public";
-        $composer['scripts']['clear-router-cache'] = "@php vendor/bin/fluxor cache:clear-router";
+        $composer['scripts']['clear-router-cache'] = "@php vendor/bin/fluxor clear-router-cache";
 
         if (isset($composer['autoload']['classmap'])) {
             unset($composer['autoload']['classmap']);
