@@ -15,14 +15,16 @@ class Setup
         $this->projectDir = $projectDir;
     }
 
-    public function run(array $userConfig, array $appConfig, array $features): void
+    public function run(array $userConfig, array $appConfig, array $features, string $docsPath = 'docs'): void
     {
         $this->io->write("\nSetting up your Fluxor project...");
 
         $this->updateComposer($userConfig, $appConfig);
         $this->createEnvFile($appConfig);
         $this->createStorageDirectories();
-        $this->updateReadme($appConfig, $features);
+        $this->updateReadme($appConfig, $features, $docsPath);
+        $this->updateFluxorMd($docsPath);
+        $this->updateLlmConfigs($docsPath);
 
         $this->io->write("  - Project configured successfully");
     }
@@ -84,10 +86,10 @@ class Setup
         $this->io->write("  - Storage directories created");
     }
 
-    private function updateReadme(array $appConfig, array $features): void
+    private function updateReadme(array $appConfig, array $features, string $docsPath): void
     {
         $docsNote = $features['docs']
-            ? "Full documentation available in the `docs/` directory.\n."
+            ? "Full documentation available in the `{$docsPath}/` directory.\n."
             : "Full documentation: https://lizzyman04.github.io/fluxor-php";
 
         $readme = "# {$appConfig['app_name']}\n\n";
@@ -104,6 +106,40 @@ class Setup
 
         file_put_contents($this->projectDir . '/README.md', $readme);
         $this->io->write("  - README.md updated");
+    }
+
+    private function updateFluxorMd(string $docsPath): void
+    {
+        $file = $this->projectDir . '/FLUXOR.md';
+        if (!file_exists($file) || $docsPath === 'docs') {
+            return;
+        }
+
+        $content = file_get_contents($file);
+        $content = str_replace('/docs/', "/{$docsPath}/", $content);
+        $content = str_replace('Docs: /docs ', "Docs: /{$docsPath} ", $content);
+        file_put_contents($file, $content);
+        $this->io->write("  - FLUXOR.md paths updated to {$docsPath}/");
+    }
+
+    private function updateLlmConfigs(string $docsPath): void
+    {
+        if ($docsPath === 'docs') {
+            return;
+        }
+
+        foreach (['AGENTS.md', 'CLAUDE.md', 'GEMINI.md'] as $filename) {
+            $file = $this->projectDir . '/' . $filename;
+            if (!file_exists($file)) {
+                continue;
+            }
+            $content = file_get_contents($file);
+            if (str_contains($content, '/docs/')) {
+                $content = str_replace('/docs/', "/{$docsPath}/", $content);
+                file_put_contents($file, $content);
+            }
+        }
+        $this->io->write("  - LLM config files updated");
     }
 
     private function slugify(string $text): string

@@ -10,6 +10,7 @@ class Installer
     private array $userConfig = [];
     private array $appConfig = [];
     private array $features = [];
+    private string $docsPath = 'docs';
 
     public static function postCreateProject(Event $event): void
     {
@@ -31,11 +32,24 @@ class Installer
         $this->appConfig = $config->collectAppConfig();
         $this->features = $config->collectFeatures();
 
+        if ($this->features['docs']) {
+            $this->docsPath = $config->collectDocsPath();
+        }
+
         $setup = new Setup($this->event->getIO(), getcwd());
-        $setup->run($this->userConfig, $this->appConfig, $this->features);
+        $setup->run($this->userConfig, $this->appConfig, $this->features, $this->docsPath);
 
         $cleanup = new Cleanup($this->event->getIO(), getcwd());
         $cleanup->run($this->features);
+
+        if ($this->features['docs'] && $this->docsPath !== 'docs') {
+            $old = getcwd() . '/docs';
+            $new = getcwd() . '/' . $this->docsPath;
+            if (is_dir($old)) {
+                rename($old, $new);
+                $this->event->getIO()->write("  - Renamed docs/ to {$this->docsPath}/");
+            }
+        }
 
         $this->success();
     }
