@@ -1,4 +1,5 @@
 # Fluxor PHP — LLM Reference
+<!-- This file is loaded only when LLM needs framework-specific information -->
 <!-- Docs: /docs | https://lizzyman04.github.io/fluxor-php/ -->
 
 **Lightweight PHP MVC** · File-based routing (Next.js-style) · Elegant Flow syntax · Boot <10ms · Zero external deps

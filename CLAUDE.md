@@ -1,1 +1,1 @@
-@FLUXOR.md
+@AGENTS.md
