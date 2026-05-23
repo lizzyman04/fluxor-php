@@ -71,3 +71,27 @@ $ua = $request->getUserAgent();
 $url = $request->isSecure();
 $path = $request->path;
 ```
+
+### Attributes (Middleware Data Passing)
+
+Middleware can attach arbitrary data to the request for downstream handlers:
+
+```php
+// In middleware
+Flow::use(function($req) {
+    $user = Auth::find($req->bearerToken());
+    $req->setAttribute('user', $user);
+    return null;
+});
+
+// In route handler
+Flow::GET()->do(function($req) {
+    $user = $req->getAttribute('user');
+    return Response::json(['name' => $user->name]);
+});
+```
+
+```php
+$request->setAttribute('key', $value);
+$request->getAttribute('key', $default = null);
+```

@@ -71,10 +71,20 @@ $view = $app->getService('view');
 
 ### `isDevelopment(): bool`
 
-Returns `true` if the app is running in development mode.
+Returns `true` if the app is running in development mode (`APP_ENV=development`).
 
 ```php
 if ($app->isDevelopment()) {
     // Show debug information
+}
+```
+
+### `isDebug(): bool`
+
+Returns `true` if `APP_DEBUG=true`, independent of the environment.
+
+```php
+if ($app->isDebug()) {
+    // Show verbose error output
 }
 ```

@@ -66,8 +66,7 @@ class Setup
         $content .= "APP_DEBUG=" . ($appConfig['app_debug'] ? 'true' : 'false') . "\n";
         $content .= "APP_PORT={$appConfig['app_port']}\n";
         $content .= "APP_TIMEZONE={$appConfig['timezone']}\n";
-        $content .= "APP_KEY={$appConfig['app_key']}\n\n";
-        $content .= "# Database, Mail, Upload features available in fluxor-mvc-template\n";
+        $content .= "APP_KEY={$appConfig['app_key']}\n";
 
         file_put_contents($this->projectDir . '/.env', $content);
         $this->io->write("  - .env file created");

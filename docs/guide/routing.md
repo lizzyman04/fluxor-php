@@ -40,6 +40,38 @@ Flow::GET()->do(function($req) {
 app/router/posts/[category]/[id].php
 ```
 
+## Catch-all Routes
+
+Use `[...slug]` syntax to capture all remaining path segments:
+
+```
+app/router/files/[...path].php
+```
+
+The parameter returns an array of segments:
+
+```php
+<?php
+// app/router/files/[...path].php
+use Fluxor\Flow;
+use Fluxor\Response;
+
+Flow::GET()->do(function($req) {
+    $segments = $req->param('path'); // array: ['images', 'avatar.png']
+    return Response::json(['path' => $segments]);
+});
+```
+
+Visiting `/files/images/avatar.png` yields `['images', 'avatar.png']`.
+
+## Route Specificity Ordering
+
+When multiple route patterns could match a URL, Fluxor dispatches in this priority order:
+
+1. **Static** — exact literal segments (e.g. `about.php`)
+2. **Dynamic** — named parameters (e.g. `[id].php`)
+3. **Catch-all** — wildcard segments (e.g. `[...slug].php`)
+
 ## Optional Groups (Prefixes)
 
 Use `(group)` for logical grouping without affecting URLs:

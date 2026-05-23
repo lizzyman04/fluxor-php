@@ -41,7 +41,8 @@ $app->getBaseUrl(); // https://example.com/
 $app->getRouter(); // Router instance (add middleware here)
 $app->getConfig(); // full config array
 $app->getService('view'); // registered service by name
-$app->isDevelopment(); // true when APP_DEBUG=true
+$app->isDevelopment(); // true when APP_ENV=development
+$app->isDebug(); // true when APP_DEBUG=true (independent of env)
 ```
 
 ## Routing
@@ -55,8 +56,9 @@ $app->isDevelopment(); // true when APP_DEBUG=true
 |`app/router/posts/[cat]/[id].php`|`/posts/{cat}/{id}`|
 |`app/router/(admin)/dashboard.php`|`/dashboard`|
 |`app/router/api/404.php`|404 handler scoped to `/api/*`|
+|`app/router/api/[...slug].php`|catch-all under `/api/*`|
 
-`[param]` → dynamic segment → `$req->param('param')`. `(group)` → URL-invisible prefix. `404.php` in any dir → scoped error handler.
+`[param]` → dynamic segment → `$req->param('param')`. `[...param]` → catch-all → `$req->param('param')` returns array. `(group)` → URL-invisible prefix. `404.php` / `not-allowed.php` in any dir → scoped error handler. Route priority: static > dynamic > catch-all.
 
 ## Flow (Route Definitions)
 <!-- @see /docs/guide/flow-syntax.md | https://lizzyman04.github.io/fluxor-php/guide/flow-syntax | /docs/api/flow.md -->
@@ -106,6 +108,9 @@ $req->session(); // all session data
 $req->getClientIp();
 $req->getUserAgent();
 $req->isSecure(); // true = HTTPS
+// Attributes (middleware → handler data passing)
+$req->setAttribute('user', $user); // set in middleware
+$req->getAttribute('user'); // get in route handler
 ```
 
 ## Response
@@ -210,7 +215,7 @@ Handler priority (most → least specific):
 4. `src/Views/errors/common.php`
 5. Fluxor built-in
 
-`APP_DEBUG=true` → full stack trace in response. `APP_DEBUG=false` → generic message. `$req->wantsJson()` → error always returned as JSON regardless of views.
+`APP_ENV=development` + `APP_DEBUG=true` → HTML error page with full stack trace (browser) or detailed JSON (API). `APP_DEBUG=false` → generic message. `$req->wantsJson()` → error always returned as JSON regardless of views.
 
 ## CORS
 <!-- @see /docs/api/cors.md | https://lizzyman04.github.io/fluxor-php/api/cors -->
@@ -236,7 +241,8 @@ Preflight (OPTIONS) handled automatically — no manual OPTIONS routes needed. P
 
 ## Configuration
 <!-- @see /docs/guide/configuration.md | https://lizzyman04.github.io/fluxor-php/guide/configuration -->
-`.env` keys: `APP_NAME` · `APP_ENV` · `APP_DEBUG` · `APP_PORT` · `APP_TIMEZONE` · `APP_KEY`
+`.env` keys: `APP_NAME` · `APP_ENV` · `APP_DEBUG` · `APP_PORT` · `APP_TIMEZONE` · `APP_KEY` · `DISABLE_FLUXOR_CACHE`
+Route cache stored in `storage/cache/`. Clear with `composer clear-router-cache`. Set `DISABLE_FLUXOR_CACHE=true` to skip caching.
 
 ## HttpStatusCode
 <!-- @see /docs/api/http-status-code.md | https://lizzyman04.github.io/fluxor-php/api/http-status-code -->
@@ -298,6 +304,7 @@ Fetch::get($url)->header('Authorization', 'Bearer token')->json();
 
 ## Key Constraints
 - `[param]` in filename → `$req->param('param')` not `$req->input()`
+- `[...param]` in filename → catch-all; `$req->param('param')` returns array of segments
 - `(group)` dirs are stripped from URL, used for logical organization only
 - `Flow::use()` registration order = execution order
 - `Flow::cors()` must be called BEFORE any `Flow::GET()/POST()/...` in the same file

@@ -33,7 +33,8 @@ During installation, you'll be asked a few questions to configure your project:
 - Timezone
 
 ### Documentation
-- Whether to include project documentation (docs/ directory)
+- Whether to include project documentation
+- Documentation folder name (`docs/`, `framework/`, `fluxor/`, or custom)
 
 ## After Installation
 
@@ -69,7 +70,6 @@ For authentication, mailer, and uploader, check out: [github.com/lizzyman04/flux
 
 ## Next Steps
 
-- Configure your `.env` file with database and other settings
 - Start building your application by creating routes in `app/router/`
 - Create views in `src/Views/`
 - Add controllers in `src/Controllers/` (if needed)

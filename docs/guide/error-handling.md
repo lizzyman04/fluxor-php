@@ -60,12 +60,15 @@ You can create error handlers for specific route directories:
 ```
 app/router/
 ├── api/
-│   ├── 404.php           # Custom 404 for /api/*
-│   └── not-found.php     # Alternative name
+│   ├── 404.php              # Custom 404 for /api/*
+│   ├── not-allowed.php      # Custom 405 for /api/*
+│   └── not-found.php        # Alternative 404 name
 ├── admin/
-│   └── 404.php           # Custom 404 for /admin/*
-└── 404.php               # Global 404 handler
+│   └── 404.php              # Custom 404 for /admin/*
+└── 404.php                  # Global 404 handler
 ```
+
+Scoped handlers receive the request URL path, so `app/router/api/404.php` is invoked for any unmatched route under `/api/*`.
 
 ### Example: `app/router/api/404.php`
 
@@ -78,6 +81,21 @@ return function($request) {
         'error' => 'API Endpoint Not Found',
         'path' => $request->path
     ], 404);
+};
+```
+
+### Example: `app/router/api/not-allowed.php`
+
+```php
+<?php
+use Fluxor\Response;
+
+return function($request) {
+    return Response::json([
+        'error' => 'Method Not Allowed',
+        'method' => $request->method,
+        'path' => $request->path
+    ], 405);
 };
 ```
 
@@ -126,7 +144,9 @@ throw new HttpException('Access denied', 403);
 
 Error responses differ based on environment:
 
-### Development Mode (`APP_DEBUG=true`)
+### Development Mode (`APP_ENV=development` and `APP_DEBUG=true`)
+
+When both conditions are true, Fluxor renders a detailed HTML error page with a full stack trace in the browser. For JSON requests, it returns detailed error information:
 
 ```php
 // Returns detailed error information

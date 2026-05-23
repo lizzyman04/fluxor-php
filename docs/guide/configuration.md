@@ -18,6 +18,23 @@ cp .env.example .env
 | `APP_PORT` | Development server port | 8000 |
 | `APP_TIMEZONE` | Timezone | UTC |
 | `APP_KEY` | Application key (auto-generated) | - |
+| `DISABLE_FLUXOR_CACHE` | Disable route cache (set to `true` in dev if needed) | - |
+
+## Route Cache
+
+Fluxor compiles routes to a persistent file-based cache for faster boot times. The cache is stored in `storage/cache/`.
+
+To clear the route cache manually:
+
+```bash
+composer clear-router-cache
+```
+
+To disable caching entirely (useful when editing routes without restarting the server):
+
+```env
+DISABLE_FLUXOR_CACHE=true
+```
 
 ## Application Configuration
 
