@@ -41,6 +41,47 @@ class Config
         ];
     }
 
+    public function collectDocsPath(): string
+    {
+        $this->io->write("\nDocumentation Folder");
+        $this->io->write("----------------------------------------");
+
+        $choices = [
+            'docs'      => 'docs/ (default)',
+            'framework' => 'framework/',
+            'fluxor'    => 'fluxor/',
+            'custom'    => 'Enter custom name',
+        ];
+
+        $index = $this->io->select(
+            "Framework docs folder name",
+            array_values($choices),
+            '0',
+            false,
+            'Invalid selection'
+        );
+
+        $keys = array_keys($choices);
+        $selected = $keys[(int) $index];
+
+        if ($selected === 'custom') {
+            return $this->io->askAndValidate(
+                "Custom folder name [<comment>docs</comment>]: ",
+                function ($v) {
+                    $v = $v ?: 'docs';
+                    if (!preg_match('/^[a-z0-9][a-z0-9_-]*$/i', $v)) {
+                        throw new \RuntimeException('Invalid folder name (alphanumeric, hyphens, underscores only)');
+                    }
+                    return $v;
+                },
+                null,
+                'docs'
+            );
+        }
+
+        return $selected;
+    }
+
     public function collectFeatures(): array
     {
         $this->io->write("\nFeature Selection");
