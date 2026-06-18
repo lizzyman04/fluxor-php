@@ -2,7 +2,7 @@
 <!-- This file is loaded only when LLM needs framework-specific information -->
 <!-- Docs: /docs | https://lizzyman04.github.io/fluxor-php/ -->
 
-**Lightweight PHP MVC** · File-based routing (Next.js-style) · Elegant Flow syntax · Boot <10ms · Zero external deps
+**Lightweight PHP MVC** · File-based routing (Next.js-style, powered by the standalone `lizzyman04/file-router` package) · Elegant Flow syntax · Boot <10ms
 
 |||
 |---|---|
@@ -59,6 +59,8 @@ $app->isDebug(); // true when APP_DEBUG=true (independent of env)
 |`app/router/api/[...slug].php`|catch-all under `/api/*`|
 
 `[param]` → dynamic segment → `$req->param('param')`. `[...param]` → catch-all → `$req->param('param')` returns array. `(group)` → URL-invisible prefix. `404.php` / `not-allowed.php` in any dir → scoped error handler. Route priority: static > dynamic > catch-all.
+
+URL matching + the compiled-route cache are handled by the standalone [`lizzyman04/file-router`](https://github.com/lizzyman04/file-router) engine (Fluxor ≥1.1); the route-file syntax and `Flow` dispatch are unchanged.
 
 ## Flow (Route Definitions)
 <!-- @see /docs/guide/flow-syntax.md | https://lizzyman04.github.io/fluxor-php/guide/flow-syntax | /docs/api/flow.md -->
