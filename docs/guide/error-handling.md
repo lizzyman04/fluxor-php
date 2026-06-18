@@ -74,7 +74,7 @@ Scoped handlers receive the request URL path, so `app/router/api/404.php` is inv
 
 ```php
 <?php
-use Fluxor\Response;
+use Fluxor\Core\Http\Response;
 
 return function($request) {
     return Response::json([
@@ -88,7 +88,7 @@ return function($request) {
 
 ```php
 <?php
-use Fluxor\Response;
+use Fluxor\Core\Http\Response;
 
 return function($request) {
     return Response::json([
@@ -104,7 +104,7 @@ return function($request) {
 Fluxor provides `HttpStatusCode` class with all standard HTTP status codes:
 
 ```php
-use Fluxor\HttpStatusCode;
+use Fluxor\Helpers\HttpStatusCode;
 
 Response::error('Not Found', HttpStatusCode::NOT_FOUND);
 Response::redirect('/home', HttpStatusCode::FOUND);
@@ -188,8 +188,8 @@ When `$request->wantsJson()` returns true, errors are returned as JSON:
 <?php
 // app/router/users/[id].php
 
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 use Fluxor\Exceptions\NotFoundException;
 
 Flow::GET()->do(function($req) {

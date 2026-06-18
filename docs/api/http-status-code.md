@@ -5,7 +5,7 @@ Provides HTTP status code constants and helper methods.
 ## Usage
 
 ```php
-use Fluxor\HttpStatusCode;
+use Fluxor\Helpers\HttpStatusCode;
 
 // Use constants
 Response::error('Not Found', HttpStatusCode::NOT_FOUND);
@@ -136,8 +136,8 @@ HttpStatusCode::isError(200);          // false
 ## Example Usage
 
 ```php
-use Fluxor\HttpStatusCode;
-use Fluxor\Response;
+use Fluxor\Helpers\HttpStatusCode;
+use Fluxor\Core\Http\Response;
 
 // API endpoint
 Flow::GET('/api/users')->do(function($req) {

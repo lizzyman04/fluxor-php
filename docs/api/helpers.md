@@ -148,10 +148,10 @@ dump($data, $meta);           // Prints multiple variables
 <?php
 // app/router/users/[id].php
 
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 use Fluxor\Exceptions\NotFoundException;
-use Fluxor\Fetch;
+use Fluxor\Core\Http\Fetch;
 
 Flow::GET()->do(function($req) {
     $userId = $req->param('id');

@@ -1,7 +1,7 @@
 <?php
 
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::GET()->do(function($req) {
     return Response::view('home', [

@@ -20,7 +20,7 @@ Create a view in `src/Views/home.php`:
 Render from a route:
 
 ```php
-use Fluxor\Response;
+use Fluxor\Core\Http\Response;
 
 Flow::GET()->do(function($req) {
     return Response::view('home', [
@@ -35,7 +35,7 @@ Flow::GET()->do(function($req) {
 Create a layout in `src/Views/layouts/main.php`:
 
 ```php
-<?php use Fluxor\View; ?>
+<?php use Fluxor\Core\View; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +50,7 @@ Create a layout in `src/Views/layouts/main.php`:
 ## Using Layouts
 
 ```php
-<?php use Fluxor\View; ?>
+<?php use Fluxor\Core\View; ?>
 
 <?php View::extend('layouts/main'); ?>
 

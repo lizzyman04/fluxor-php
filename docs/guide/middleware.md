@@ -9,7 +9,7 @@ Middleware is a callable that receives the request:
 ```php
 $authMiddleware = function($request) {
     if (!$request->isAuthenticated()) {
-        return Fluxor\Response::redirect('/login');
+        return Fluxor\Core\Http\Response::redirect('/login');
     }
     // Return null to continue
     return null;
@@ -21,7 +21,7 @@ $authMiddleware = function($request) {
 ### Global Middleware
 
 ```php
-use Fluxor\Flow;
+use Fluxor\Core\Routing\Flow;
 
 Flow::use(function($request) {
     // Log all requests
@@ -35,7 +35,7 @@ Flow::use(function($request) {
 For route-specific middleware, you can use the `use()` method before defining the route:
 
 ```php
-use Fluxor\Flow;
+use Fluxor\Core\Routing\Flow;
 
 $auth = fn($req) => $req->isAuthenticated() ? null : Response::redirect('/login');
 
@@ -47,7 +47,7 @@ Flow::GET('/admin/dashboard')->do(fn($req) => Response::view('admin/dashboard'))
 ### Router Middleware
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 $app->getRouter()->addMiddleware('cors', function($req) {
     header('Access-Control-Allow-Origin: *');
     if ($req->method === 'OPTIONS') {
@@ -73,7 +73,7 @@ $throttle = function($request) {
     $attempts = $_SESSION[$key] ?? 0;
 
     if ($attempts > 60) {
-        return Fluxor\Response::error('Too many requests', 429);
+        return Fluxor\Core\Http\Response::error('Too many requests', 429);
     }
 
     $_SESSION[$key] = $attempts + 1;

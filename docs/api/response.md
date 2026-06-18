@@ -7,7 +7,7 @@ The `Response` class builds HTTP responses.
 ### JSON Responses
 
 ```php
-use Fluxor\Response;
+use Fluxor\Core\Http\Response;
 
 Response::json($data, $status, $headers);
 Response::success($data, $message, $status);

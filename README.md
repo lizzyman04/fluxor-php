@@ -9,7 +9,7 @@
   <sub>Powered by <a href="https://github.com/lizzyman04/fluxor">Fluxor Core</a> [![Core Version](https://poser.pugx.org/lizzyman04/fluxor/v/stable)](https://packagist.org/packages/lizzyman04/fluxor) [![Core Downloads](https://poser.pugx.org/lizzyman04/fluxor/downloads)](https://packagist.org/packages/lizzyman04/fluxor)</sub>
   
   <p>
-    <a href="https://lizzyman04.github.io/fluxor-php">📚 Documentation</a> •
+    <a href="https://fluxor.tudocomlizzyman.com">📚 Documentation</a> •
     <a href="https://github.com/lizzyman04/fluxor">🐙 GitHub </a> •
     <a href="https://packagist.org/packages/lizzyman04/fluxor-php">📦 Packagist</a>
   </p>
@@ -19,7 +19,7 @@
 
 ## 📖 Documentation
 
-**Full documentation available at:** 👉 [**https://lizzyman04.github.io/fluxor-php**](https://lizzyman04.github.io/fluxor-php)
+**Full documentation available at:** 👉 [**https://fluxor.tudocomlizzyman.com**](https://fluxor.tudocomlizzyman.com)
 
 The documentation includes:
 - 📚 Installation guide
@@ -168,8 +168,8 @@ my-app/
 <?php
 // app/router/api/hello/index.php
 
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::GET()->do(fn($req) => 
     Response::success(['message' => 'Hello, ' . $req->input('name', 'World')])

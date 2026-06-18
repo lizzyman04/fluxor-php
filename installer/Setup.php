@@ -89,7 +89,7 @@ class Setup
     {
         $docsNote = $features['docs']
             ? "Full documentation available in the `{$docsPath}/` directory.\n."
-            : "Full documentation: https://lizzyman04.github.io/fluxor-php";
+            : "Full documentation: https://fluxor.tudocomlizzyman.com";
 
         $readme = "# {$appConfig['app_name']}\n\n";
         $readme .= "## Quick Start\n\n";

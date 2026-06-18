@@ -10,7 +10,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Initialize the Fluxor application
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 
 // Run the application
 $app->run();

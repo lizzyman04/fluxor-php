@@ -5,7 +5,7 @@ The `App` class is the main entry point for your Fluxor application.
 ## Basic Usage
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 $app->run();
 ```
 
@@ -16,9 +16,9 @@ $app->run();
 Creates a new application instance. Base path is auto-detected.
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 // or
-$app = new Fluxor\App('/custom/path');
+$app = new Fluxor\Core\App('/custom/path');
 ```
 
 ### `run()`

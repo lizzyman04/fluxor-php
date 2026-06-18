@@ -27,8 +27,8 @@ Fluxor is a lightweight PHP MVC framework inspired by Next.js file-based routing
 ```php
 <?php
 // app/router/index.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::GET()->do(function($req) {
     return Response::view('home', [

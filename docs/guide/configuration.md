@@ -41,7 +41,7 @@ DISABLE_FLUXOR_CACHE=true
 You can also configure paths programmatically:
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 $app->setConfig([
     'router_path' => __DIR__ . '/custom/router',
     'views_path' => __DIR__ . '/resources/views',
@@ -54,7 +54,7 @@ $app->setConfig([
 Protect critical configuration keys from modification:
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 
 // Lock specific keys
 $app->lockConfig('router_path', 'views_path');
@@ -75,7 +75,7 @@ Configure CORS globally or per route:
 ### Global CORS
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 $app->cors()
     ->allowOrigin('https://myfrontend.com')
     ->allowCredentials(true)
@@ -87,8 +87,8 @@ $app->run();
 
 ```php
 // app/router/api/users.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::cors([
     'allowed_origins' => ['https://admin.example.com'],

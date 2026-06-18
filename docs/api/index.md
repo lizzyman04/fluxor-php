@@ -39,11 +39,11 @@ Welcome to the Fluxor API Reference. Here you'll find detailed documentation for
 
 ```php
 <?php
-use Fluxor\App;
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\App;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 $app->run();
 
 // Define a route
@@ -63,7 +63,7 @@ $data = fetch('GET', 'https://api.example.com/users')->json();
 ### Making HTTP Requests
 
 ```php
-use Fluxor\Fetch;
+use Fluxor\Core\Http\Fetch;
 
 // Simple GET
 $users = Fetch::get('https://api.example.com/users')->json();

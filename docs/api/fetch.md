@@ -5,7 +5,7 @@ The `Fetch` class provides a lightweight, zero-dependency HTTP client for making
 ## Basic Usage
 
 ```php
-use Fluxor\Fetch;
+use Fluxor\Core\Http\Fetch;
 
 // GET request
 $users = Fetch::get('https://api.example.com/users')->json();

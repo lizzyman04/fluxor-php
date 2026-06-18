@@ -1,6 +1,6 @@
 # Fluxor PHP — LLM Reference
 <!-- This file is loaded only when LLM needs framework-specific information -->
-<!-- Docs: /docs | https://lizzyman04.github.io/fluxor-php/ -->
+<!-- Docs: /docs | https://fluxor.tudocomlizzyman.com/ -->
 
 **Lightweight PHP MVC** · File-based routing (Next.js-style, powered by the standalone `lizzyman04/file-router` package) · Elegant Flow syntax · Boot <10ms
 
@@ -8,10 +8,10 @@
 |---|---|
 |PHP|≥8.1|
 |Boot time|<10ms|
-|External deps|0|
+|Runtime deps|`lizzyman04/fluxor` ^2.0 (routing via `lizzyman04/file-router`)|
 |Install|`composer create-project lizzyman04/fluxor-php my-app`|
 |Dev server|`composer dev` → `http://localhost:8000`|
-|Composer pkg|`lizzyman04/fluxor`|
+|Composer pkg|`lizzyman04/fluxor` ^2.0|
 
 ## Project Layout
 ```
@@ -24,9 +24,9 @@ public/index.php entry point (front controller)
 ```
 
 ## App Bootstrap
-<!-- @see /docs/api/app.md | https://lizzyman04.github.io/fluxor-php/api/app -->
+<!-- @see /docs/api/app.md | https://fluxor.tudocomlizzyman.com/api/app -->
 ```php
-use Fluxor\App;
+use Fluxor\Core\App;
 $app = new App(); // base path auto-detected
 $app->setConfig([ // optional overrides
  'router_path' => __DIR__ . '/custom/router',
@@ -46,7 +46,7 @@ $app->isDebug(); // true when APP_DEBUG=true (independent of env)
 ```
 
 ## Routing
-<!-- @see /docs/guide/routing.md | https://lizzyman04.github.io/fluxor-php/guide/routing -->
+<!-- @see /docs/guide/routing.md | https://fluxor.tudocomlizzyman.com/guide/routing -->
 |File|URL|
 |---|---|
 |`app/router/index.php`|`/`|
@@ -63,10 +63,10 @@ $app->isDebug(); // true when APP_DEBUG=true (independent of env)
 URL matching + the compiled-route cache are handled by the standalone [`lizzyman04/file-router`](https://github.com/lizzyman04/file-router) engine (Fluxor ≥1.1); the route-file syntax and `Flow` dispatch are unchanged.
 
 ## Flow (Route Definitions)
-<!-- @see /docs/guide/flow-syntax.md | https://lizzyman04.github.io/fluxor-php/guide/flow-syntax | /docs/api/flow.md -->
+<!-- @see /docs/guide/flow-syntax.md | https://fluxor.tudocomlizzyman.com/guide/flow-syntax | /docs/api/flow.md -->
 ```php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 Flow::GET()->do(fn($req) => Response::json(['ok' => true]));
 Flow::POST()->do(fn($req) => Response::success($req->all(), 'Created', 201));
 Flow::PUT()->do(fn($req) => Response::success(null, 'Updated'));
@@ -81,7 +81,7 @@ Flow::use(fn($req) => null); // middleware — null=continue, Response=stop, fal
 ```
 
 ## Request
-<!-- @see /docs/api/request.md | https://lizzyman04.github.io/fluxor-php/api/request -->
+<!-- @see /docs/api/request.md | https://fluxor.tudocomlizzyman.com/api/request -->
 ```php
 // Properties (direct access)
 $req->method; $req->path; $req->query; $req->body;
@@ -116,9 +116,9 @@ $req->getAttribute('user'); // get in route handler
 ```
 
 ## Response
-<!-- @see /docs/api/response.md | https://lizzyman04.github.io/fluxor-php/api/response -->
+<!-- @see /docs/api/response.md | https://fluxor.tudocomlizzyman.com/api/response -->
 ```php
-use Fluxor\Response;
+use Fluxor\Core\Http\Response;
 Response::json($data, $status=200, $headers=[]);
 Response::success($data, $message='OK', $status=200); // {"success":true,"message":"...","data":{}}
 Response::error($message, $status=500, $details=null); // {"success":false,"message":"...","details":{}}
@@ -132,36 +132,37 @@ Response::json($data)->status(201)->header('X-Foo', 'bar')->withCookie('k', 'v',
 ```
 
 ## Controllers
-<!-- @see /docs/guide/controllers.md | https://lizzyman04.github.io/fluxor-php/guide/controllers -->
+<!-- @see /docs/guide/controllers.md | https://fluxor.tudocomlizzyman.com/guide/controllers -->
 ```php
 namespace App\Controllers; // PSR-4: src/Controllers/
-use Fluxor\Controller;
-use Fluxor\Response;
+use Fluxor\Core\Controller;
+use Fluxor\Core\Http\Request;
+use Fluxor\Core\Http\Response;
 use Fluxor\Exceptions\NotFoundException;
 class UserController extends Controller {
- public function index() { return Response::json([]); }
- public function show($id) { return Response::json(['id' => $id]); } // $id from route param
- public function store() {
- $data = $this->getRequest()->only(['name', 'email']);
+ public function index(Request $request) { return Response::json([]); }
+ public function show(Request $request) { return Response::json(['id' => $request->param('id')]); } // route param
+ public function store(Request $request) {
+ $data = $request->only(['name', 'email']);
  return Response::success($data, 'Created', 201);
  }
- public function update($id) { ... }
- public function delete($id) { return Response::success(null, "Deleted #{$id}", 204); }
+ public function update(Request $request) { ... }
+ public function delete(Request $request) { return Response::success(null, "Deleted #{$request->param('id')}", 204); }
 }
-// $this->getRequest() → Request instance inside any controller method
+// Each action method receives the Request as its argument
 ```
 Route file binding:
 ```php
 // app/router/api/users/[id].php
 use App\Controllers\UserController;
-use Fluxor\Flow;
+use Fluxor\Core\Routing\Flow;
 Flow::GET()->to(UserController::class, 'show');
 Flow::PUT()->to(UserController::class, 'update');
 Flow::DELETE()->to(UserController::class, 'delete');
 ```
 
 ## Middleware
-<!-- @see /docs/guide/middleware.md | https://lizzyman04.github.io/fluxor-php/guide/middleware -->
+<!-- @see /docs/guide/middleware.md | https://fluxor.tudocomlizzyman.com/guide/middleware -->
 ```php
 // Global — runs on every request, in registration order
 Flow::use(function($req) {
@@ -177,12 +178,12 @@ $app->getRouter()->addMiddleware('cors', fn($req) => null);
 Returns: `null` → continue · `Response` → stop & send · `false` → 403 Forbidden.
 
 ## Views & Layouts
-<!-- @see /docs/guide/views.md | https://lizzyman04.github.io/fluxor-php/guide/views -->
+<!-- @see /docs/guide/views.md | https://fluxor.tudocomlizzyman.com/guide/views -->
 ```php
 // src/Views/home.php — rendered by Response::view('home', $data)
 <h1><?= $title ?></h1>
 // Layout — src/Views/layouts/main.php
-<?php use Fluxor\View; ?>
+<?php use Fluxor\Core\View; ?>
 <html><body><?= View::yield('content') ?><?= View::yield('sidebar', '') ?></body></html>
 // View extending layout
 <?php View::extend('layouts/main'); ?>
@@ -199,7 +200,7 @@ Returns: `null` → continue · `Response` → stop & send · `false` → 403 Fo
 ```
 
 ## Error Handling
-<!-- @see /docs/guide/error-handling.md | https://lizzyman04.github.io/fluxor-php/guide/error-handling -->
+<!-- @see /docs/guide/error-handling.md | https://fluxor.tudocomlizzyman.com/guide/error-handling -->
 ```php
 use Fluxor\Exceptions\{AppException, HttpException, NotFoundException, ValidationException};
 throw new NotFoundException('User not found'); // → 404
@@ -220,7 +221,7 @@ Handler priority (most → least specific):
 `APP_ENV=development` + `APP_DEBUG=true` → HTML error page with full stack trace (browser) or detailed JSON (API). `APP_DEBUG=false` → generic message. `$req->wantsJson()` → error always returned as JSON regardless of views.
 
 ## CORS
-<!-- @see /docs/api/cors.md | https://lizzyman04.github.io/fluxor-php/api/cors -->
+<!-- @see /docs/api/cors.md | https://fluxor.tudocomlizzyman.com/api/cors -->
 ```php
 // Global (public/index.php — before $app->run())
 $app->cors()
@@ -242,14 +243,14 @@ Flow::cors([
 Preflight (OPTIONS) handled automatically — no manual OPTIONS routes needed. Per-route config overrides global. Invalid origin → 403. `supports_credentials=true` + `'*'` origin = browsers reject.
 
 ## Configuration
-<!-- @see /docs/guide/configuration.md | https://lizzyman04.github.io/fluxor-php/guide/configuration -->
+<!-- @see /docs/guide/configuration.md | https://fluxor.tudocomlizzyman.com/guide/configuration -->
 `.env` keys: `APP_NAME` · `APP_ENV` · `APP_DEBUG` · `APP_PORT` · `APP_TIMEZONE` · `APP_KEY` · `DISABLE_FLUXOR_CACHE`
 Route cache stored in `storage/cache/`. Clear with `composer clear-router-cache`. Set `DISABLE_FLUXOR_CACHE=true` to skip caching.
 
 ## HttpStatusCode
-<!-- @see /docs/api/http-status-code.md | https://lizzyman04.github.io/fluxor-php/api/http-status-code -->
+<!-- @see /docs/api/http-status-code.md | https://fluxor.tudocomlizzyman.com/api/http-status-code -->
 ```php
-use Fluxor\HttpStatusCode;
+use Fluxor\Helpers\HttpStatusCode;
 // Common constants (full list in /docs/api/http-status-code.md)
 HttpStatusCode::OK // 200
 HttpStatusCode::CREATED // 201
@@ -274,7 +275,7 @@ HttpStatusCode::isError(404); // true (4xx or 5xx)
 ```
 
 ## Global Helpers
-<!-- @see /docs/api/helpers.md | https://lizzyman04.github.io/fluxor-php/api/helpers -->
+<!-- @see /docs/api/helpers.md | https://fluxor.tudocomlizzyman.com/api/helpers -->
 ```php
 app() // App singleton
 app('view') // registered service by name
@@ -294,9 +295,9 @@ dump($var) // dump, continues execution
 ```
 
 ## HTTP Client (Fetch)
-<!-- @see /docs/api/fetch.md | https://lizzyman04.github.io/fluxor-php/api/fetch -->
+<!-- @see /docs/api/fetch.md | https://fluxor.tudocomlizzyman.com/api/fetch -->
 ```php
-use Fluxor\Fetch;
+use Fluxor\Core\Http\Fetch;
 Fetch::get($url)->json();
 Fetch::post($url, ['key' => 'val'])->json();
 Fetch::put($url, $data)->json();
@@ -312,6 +313,6 @@ Fetch::get($url)->header('Authorization', 'Bearer token')->json();
 - `Flow::cors()` must be called BEFORE any `Flow::GET()/POST()/...` in the same file
 - `supports_credentials=true` requires explicit origin list — never `'*'`
 - CSRF: call `$req->validateCsrf()` manually on mutating routes (POST/PUT/PATCH/DELETE)
-- Controllers must extend `Fluxor\Controller`; use `$this->getRequest()` for the request
+- Controllers must extend `Fluxor\Core\Controller`; each action method receives the `Request` as its argument (e.g. `show(Request $request)`)
 - PSR-4: `App\Controllers` → `src/Controllers/`; auto-discovered by Composer
 - All helpers are globally available, no namespace needed

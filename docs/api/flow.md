@@ -113,8 +113,8 @@ app/router/
 **`app/router/api/v1/users/index.php`**
 ```php
 <?php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::GET()->do(fn($req) => Response::json([
     ['id' => 1, 'name' => 'John'],
@@ -125,8 +125,8 @@ Flow::GET()->do(fn($req) => Response::json([
 **`app/router/api/v1/users/store.php`**
 ```php
 <?php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::POST()->do(fn($req) => {
     $data = $req->only(['name', 'email']);
@@ -137,8 +137,8 @@ Flow::POST()->do(fn($req) => {
 **`app/router/api/v1/users/[id].php`**
 ```php
 <?php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::GET()->do(function($req) {
     $id = $req->param('id');

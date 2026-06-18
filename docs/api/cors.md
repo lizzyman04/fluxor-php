@@ -7,9 +7,9 @@ The `CORS` class provides Cross-Origin Resource Sharing configuration for your F
 ### Global CORS Configuration
 
 ```php
-use Fluxor\App;
+use Fluxor\Core\App;
 
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 
 // Simple global CORS
 $app->cors()
@@ -23,8 +23,8 @@ $app->run();
 
 ```php
 // app/router/api/users.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::cors([
     'allowed_origins' => ['https://myapp.com', 'https://admin.myapp.com'],
@@ -117,7 +117,7 @@ Configures CORS for the current route file.
 
 ```php
 // app/router/api/public/data.php
-use Fluxor\Flow;
+use Fluxor\Core\Routing\Flow;
 
 // Allow public access
 Flow::cors([
@@ -133,7 +133,7 @@ Flow::GET()->do(fn($req) => Response::json(['public' => 'data']));
 ### API with Multiple Origins
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 
 $app->cors()
     ->allowOrigins([
@@ -151,8 +151,8 @@ $app->run();
 
 ```php
 // app/router/admin/dashboard.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::cors([
     'allowed_origins' => ['https://admin.example.com'],
@@ -171,8 +171,8 @@ Flow::GET()->do(function($req) {
 
 ```php
 // app/router/api/public/posts.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 Flow::cors([
     'allowed_origins' => ['*'],
@@ -190,7 +190,7 @@ Flow::GET()->do(fn($req) => Response::json([
 ### Route-Specific vs Global
 
 ```php
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 
 // Global CORS (applies to all routes)
 $app->cors()
@@ -225,9 +225,9 @@ Flow::POST()->do(fn($req) => Response::success(null, 'Created'));
 ```php
 <?php
 // public/index.php
-use Fluxor\App;
+use Fluxor\Core\App;
 
-$app = new Fluxor\App();
+$app = new Fluxor\Core\App();
 
 // Global CORS for API
 $app->cors()
@@ -244,8 +244,8 @@ $app->run();
 ```php
 <?php
 // app/router/api/v1/users.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 // Specific CORS for user endpoints
 Flow::cors([
@@ -261,8 +261,8 @@ Flow::POST()->do(fn($req) => Response::success(null, 'User created', 201));
 ```php
 <?php
 // app/router/api/v1/public/status.php
-use Fluxor\Flow;
-use Fluxor\Response;
+use Fluxor\Core\Routing\Flow;
+use Fluxor\Core\Http\Response;
 
 // Public endpoint - permissive CORS
 Flow::cors([

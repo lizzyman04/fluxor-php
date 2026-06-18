@@ -1,4 +1,4 @@
-<?php use Fluxor\View; ?>
+<?php use Fluxor\Core\View; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,7 @@
             <?= View::yield('content') ?>
         </div>
         <footer>
-            <p>⚡ Fluxor PHP Framework | <a href="https://lizzyman04.github.io/fluxor-php">Docs</a> | <a href="https://github.com/lizzyman04/fluxor">GitHub</a></p>
+            <p>⚡ Fluxor PHP Framework | <a href="https://fluxor.tudocomlizzyman.com">Docs</a> | <a href="https://github.com/lizzyman04/fluxor">GitHub</a></p>
         </footer>
     </div>
     <?= View::yield('scripts') ?>
