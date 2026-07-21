@@ -1,6 +1,6 @@
 export default {
     title: 'Fluxor PHP',
-    base: '/',
+    base: '/fluxor-php/',
     description: 'Lightweight PHP MVC framework with file-based routing',
     themeConfig: {
         logo: '/fluxor.svg',
